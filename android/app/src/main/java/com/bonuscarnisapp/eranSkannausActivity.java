@@ -8,8 +8,12 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
 
 public class eranSkannausActivity extends AppCompatActivity {
+
+    private Button buttonAloitaSkannaus;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,6 +32,27 @@ public class eranSkannausActivity extends AppCompatActivity {
         } else {
             actionBar.setTitle("Nimetön erä");
         }
+
+        // buttonAloitaSkannaus -painikkeen toiminnallisuus
+        buttonAloitaSkannaus = findViewById(R.id.btAloitaSkannaus);
+        buttonAloitaSkannaus.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                aloitaSkannaus(buttonAloitaSkannaus);
+            }
+        });
+    }
+
+    /*
+    Metodi, joka määrittää mitä tapahtuu, kun käyttäjä klikkaa btAloitaSkannaus-painiketta
+     */
+    public void aloitaSkannaus(Button buttonAloitaSkannaus){
+        // Piilotetaan kyseinen btAloitaSkannaus-painike
+        buttonAloitaSkannaus.setVisibility(View.GONE);
+        // Johonkin näkyviin ilmestyy "Lopeta skannaus" tms. painike, jolla erän skannauksen voi hallitusti lopettaa?
+        // TODO
+        // Kutsutaan viivakoodin-lukemisen hoitavaa metodia, jotta viivakoodinluku aktivoituu
+        // TODO
     }
 
     /*

@@ -2,20 +2,23 @@
     <!-- Ohjelman nimi; oletuksena näkyisi ActionBarissa otsikkona, mutta monessa Actionissa ko. otsikko on korvattu muulla -->
     <string name="app_name">joku hieno nimi</string>
 
-    <!-- MainActivityn sisältö -->
-    <string name="start_new">Aloita uuden erän skannaus</string>
-    <string name="browse_and_edit">Selaa ja muokkaa aiempia eriä</string>
-    <string name="other_activities">Muut toiminnot</string>
-    <string name="logo">Yrityksen logo</string>
-    <string name="menu">Valikko</string>
+    <!-- activity_main.xml / MainActivityn sisältö -->
+    <string name="start_new">Aloita uuden erän skannaus</string>                <!-- "btAloitaUudenEranSkannaus" -buttonin teksti -->
+    <string name="browse_and_edit">Selaa ja muokkaa aiempia eriä</string>       <!-- "btSelaaJaMuokkaa" -buttonin teksti -->
+    <string name="other_activities">Muut toiminnot</string>                     <!-- "btMuutToiminnot" -buttonin teksti -->
+    <string name="logo">Yrityksen logo</string>                                 <!-- "ivAloitussivunLogo" -imageViewin teksti -->
+    <string name="menu">Valikko</string>                                        <!-- "ibAloitussivunValikko" -imageButtonin teksti -->
+    <!-- Kolme pistettä -valikon sisältö -->
+    <string name="settings">Asetukset</string>                                  <!-- "Asetukset"-vaihtoehdon teksti -->
+    <string name="exit">Lopeta ohjelma</string>                                 <!-- "Lopeta ohjelma" -vaihtoehdon teksti -->
 
-    <!-- eranNimeaminenActivityn sisältö -->
-    <string name="cancel">Peruuta</string>
-    <string name="confirm">Jatka</string>
-    <string name="give_name">Anna uudelle erälle nimi:</string>
-    <string name="hint_name">Kirjoita nimi...</string>
+    <!-- activity_eran_nimeaminen.xml / eranNimeaminenActivityn sisältö -->
+    <string name="cancel">Peruuta</string>                                      <!-- "btPeruuta" -buttonin teksti -->
+    <string name="confirm">Jatka</string>                                       <!-- "btJatka" -buttonin teksti -->
+    <string name="give_name">Anna uudelle erälle nimi:</string>                 <!-- "tvNimeaEra" -textViewin teksti -->
+    <string name="hint_name">Kirjoita nimi...</string>                          <!-- "textAnnaNimi" -editTextin teksti -->
 
-    <!-- ohjelmanAsetuksetActivityn sisältö -->
-    <string name="settings">Asetukset</string>
-    <string name="exit">Lopeta ohjelma</string>
+    <!-- activity_eran_skannaus.xml / eranSkannausActivityn sisältö -->
+    <string name="start_scanning">Aloita erän skannaus</string>                 <!-- "Aloita skannaus" -buttonin teksti -->
+    <string name="list_product">Listaa tuote</string>                           <!-- "Listaa tuote" -buttonin teksti -->
 </resources>

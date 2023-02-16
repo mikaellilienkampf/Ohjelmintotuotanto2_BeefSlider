@@ -11,8 +11,8 @@
         android:layout_width="389dp"
         android:layout_height="227dp"
         android:layout_marginTop="16dp"
-        android:text="Tälle alueelle skannerinäkymä kameran kautta? On aktiivisena koko ajan, ja aina kun viivakoodi on luettu, tuotteen tiedot ilmestyvät väliaikaisesti alapuolen textviewiin. Vasta kun käyttäjä klikkaa Listaa tuote -painiketta, ko. tuote lisätään tiedostoihin. Lisäksi skannatuista tuotteista kerrytetään tietoa alaosaan (joku listview tms.) + yhteenveto"
-        android:textSize="20dp"
+        android:text="Tälle alueelle skannerinäkymä kameran kautta? Aktivoituu, kun käyttäjä aloittaa skannauksen ja pysyy aktiivisena koko ajan, ja aina kun viivakoodi on luettu, tuotteen tiedot ilmestyvät väliaikaisesti alapuolen textviewiin. Vasta kun käyttäjä klikkaa Listaa tuote -painiketta, ko. tuote lisätään tiedostoihin. Lisäksi skannatuista tuotteista kerrytetään tietoa alaosaan (joku listview tms.) + yhteenveto"
+        android:textSize="12dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -29,12 +29,12 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
-        android:enabled="false"
         android:id="@+id/btListaaTuote"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="304dp"
-        android:text="Listaa tuote"
+        android:enabled="false"
+        android:text="@string/list_product"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
@@ -50,4 +50,15 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.323"
         app:layout_constraintStart_toStartOf="parent" />
+
+    <Button
+        android:id="@+id/btAloitaSkannaus"
+        android:layout_width="227dp"
+        android:layout_height="51dp"
+        android:layout_marginTop="304dp"
+        android:text="@string/start_scanning"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>
