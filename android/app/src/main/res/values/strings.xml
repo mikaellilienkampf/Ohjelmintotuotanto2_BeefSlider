@@ -1,18 +1,21 @@
 <resources>
+    <!-- Ohjelman nimi; oletuksena näkyisi ActionBarissa otsikkona, mutta monessa Actionissa ko. otsikko on korvattu muulla -->
     <string name="app_name">joku hieno nimi</string>
 
+    <!-- MainActivityn sisältö -->
     <string name="start_new">Aloita uuden erän skannaus</string>
     <string name="browse_and_edit">Selaa ja muokkaa aiempia eriä</string>
     <string name="other_activities">Muut toiminnot</string>
     <string name="logo">Yrityksen logo</string>
     <string name="menu">Valikko</string>
 
+    <!-- eranNimeaminenActivityn sisältö -->
     <string name="cancel">Peruuta</string>
     <string name="confirm">Jatka</string>
     <string name="give_name">Anna uudelle erälle nimi:</string>
     <string name="hint_name">Kirjoita nimi...</string>
 
+    <!-- ohjelmanAsetuksetActivityn sisältö -->
     <string name="settings">Asetukset</string>
     <string name="exit">Lopeta ohjelma</string>
-
 </resources>

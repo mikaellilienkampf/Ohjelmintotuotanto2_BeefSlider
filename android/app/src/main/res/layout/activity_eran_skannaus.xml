@@ -8,12 +8,46 @@
 
     <TextView
         android:id="@+id/tvSkannaustila"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="268dp"
-        android:text="TO DO"
-        android:textSize="50dp"
+        android:layout_width="389dp"
+        android:layout_height="227dp"
+        android:layout_marginTop="16dp"
+        android:text="Tälle alueelle skannerinäkymä kameran kautta? On aktiivisena koko ajan, ja aina kun viivakoodi on luettu, tuotteen tiedot ilmestyvät väliaikaisesti alapuolen textviewiin. Vasta kun käyttäjä klikkaa Listaa tuote -painiketta, ko. tuote lisätään tiedostoihin. Lisäksi skannatuista tuotteista kerrytetään tietoa alaosaan (joku listview tms.) + yhteenveto"
+        android:textSize="20dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tvSkannattuTuote"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="264dp"
+        android:text="Tähän skannatun tuotteen tiedot väliaikaisesti"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.496"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:enabled="false"
+        android:id="@+id/btListaaTuote"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="304dp"
+        android:text="Listaa tuote"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tvYhteenvetoSkannauksista"
+        android:layout_width="377dp"
+        android:layout_height="24dp"
+        android:layout_marginBottom="16dp"
+        android:text="Skannattuja tuotteita n kpl, yht. X € ja Z,YYY kg"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.323"
+        app:layout_constraintStart_toStartOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>
