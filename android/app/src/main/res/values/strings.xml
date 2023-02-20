@@ -20,5 +20,9 @@
 
     <!-- activity_eran_skannaus.xml / eranSkannausActivityn sisältö -->
     <string name="start_scanning">Aloita erän skannaus</string>                 <!-- "Aloita skannaus" -buttonin teksti -->
-    <string name="list_product">Listaa tuote</string>                           <!-- "Listaa tuote" -buttonin teksti -->
+    <string name="list_product">Listaa tuote</string>
+    <string name="lisaa_uusi_tuote_jarjestelmaan">Lisää uusi tuote järjestelmään</string>
+    <string name="anna_viivakoodi">Anna viivakoodi...</string>
+    <string name="anna_tuotenimi">Anna tuotenimi...</string>
+    <string name="tallenna">Tallenna</string>                           <!-- "Listaa tuote" -buttonin teksti -->
 </resources>
