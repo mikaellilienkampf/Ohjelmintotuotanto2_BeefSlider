@@ -13,6 +13,9 @@
         android:theme="@style/Theme.BonusCarnisApp"
         tools:targetApi="31">
         <activity
+            android:name=".lisaaUusiTuoteActivity"
+            android:exported="false" />
+        <activity
             android:name=".ohjelmanAsetuksetActivity"
             android:exported="false">
             <meta-data

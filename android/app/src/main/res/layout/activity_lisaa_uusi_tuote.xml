@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".lisaaUusiTuoteActivity">
+
+    <EditText
+        android:id="@+id/tuotteenPainoText"
+        android:layout_width="239dp"
+        android:layout_height="77dp"
+        android:layout_marginTop="400dp"
+        android:autofillHints=""
+        android:ems="15"
+        android:inputType="textPersonName"
+        android:text="@string/anna_tuotteen_hinta"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="LabelFor,TextSizeCheck" />
+
+    <EditText
+        android:id="@+id/tuoteNimiText"
+        android:layout_width="239dp"
+        android:layout_height="77dp"
+        android:layout_marginTop="280dp"
+        android:autofillHints=""
+        android:ems="15"
+        android:inputType="textPersonName"
+        android:text="@string/anna_tuotteen_nimi"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="LabelFor" />
+
+    <EditText
+        android:id="@+id/eanKoodiText"
+        android:layout_width="239dp"
+        android:layout_height="77dp"
+        android:layout_marginTop="152dp"
+        android:autofillHints=""
+        android:ems="15"
+        android:inputType="textPersonName"
+        android:text="@string/anna_ean_koodi"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="LabelFor" />
+
+    <Button
+        android:id="@+id/tallennaButton"
+        android:layout_width="257dp"
+        android:layout_height="75dp"
+        android:text="@string/tallenna"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:ignore="MissingConstraints"
+        tools:layout_editor_absoluteY="568dp" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

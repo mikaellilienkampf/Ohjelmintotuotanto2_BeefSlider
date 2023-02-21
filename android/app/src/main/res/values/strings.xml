@@ -24,5 +24,9 @@
     <string name="lisaa_uusi_tuote_jarjestelmaan">Lisää uusi tuote järjestelmään</string>
     <string name="anna_viivakoodi">Anna viivakoodi...</string>
     <string name="anna_tuotenimi">Anna tuotenimi...</string>
-    <string name="tallenna">Tallenna</string>                           <!-- "Listaa tuote" -buttonin teksti -->
+    <string name="tallenna">Tallenna</string>
+    <string name="anna_EAN_koodi" />
+    <string name="anna_ean_koodi">Anna EAN koodi...</string>
+    <string name="anna_tuotteen_nimi">Anna tuotteen nimi...</string>
+    <string name="anna_tuotteen_hinta">Anna tuotteen hinta...</string>                           <!-- "Listaa tuote" -buttonin teksti -->
 </resources>
