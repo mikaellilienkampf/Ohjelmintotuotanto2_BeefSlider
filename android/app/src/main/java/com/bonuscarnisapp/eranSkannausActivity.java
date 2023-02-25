@@ -1,5 +1,6 @@
 package com.bonuscarnisapp;
 
+import androidx.activity.result.ActivityResultLauncher;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
@@ -10,10 +11,21 @@ import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
+
+import com.journeyapps.barcodescanner.ScanContract;
+import com.journeyapps.barcodescanner.ScanOptions;
+
+import java.util.UUID;
 
 public class eranSkannausActivity extends AppCompatActivity {
 
     private Button buttonAloitaSkannaus;
+
+    String firstTwoChars;
+    String nextSixChars;
+    String nextFourChars;
+    String lastChar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,8 +63,7 @@ public class eranSkannausActivity extends AppCompatActivity {
         buttonAloitaSkannaus.setVisibility(View.GONE);
         // Johonkin näkyviin ilmestyy "Lopeta skannaus" tms. painike, jolla erän skannauksen voi hallitusti lopettaa?
         // TODO
-        // Kutsutaan viivakoodin-lukemisen hoitavaa metodia, jotta viivakoodinluku aktivoituu
-        // TODO
+        scanCode();
     }
 
     /*
@@ -97,6 +108,82 @@ public class eranSkannausActivity extends AppCompatActivity {
                 alert.show();
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void scanCode() {
+        // Asetetaan asetukset viivakoodinlukijalle.
+        ScanOptions options = new ScanOptions();
+        options.setPrompt("---");
+        options.setBeepEnabled(true);
+        options.setOrientationLocked(true);
+        options.setCaptureActivity(CaptureAct.class);
+
+        // Luodaan uusi launcher viivakoodinlukijalle ja käynnistetään se annetuilla asetuksilla.
+        barLaucher.launch(options);
+    }
+
+    ActivityResultLauncher<ScanOptions> barLaucher = registerForActivityResult(new ScanContract(), result->
+    {
+        if(result.getContents() !=null)
+        {
+            // Luodaan uusi hälytysikkuna näyttämään viivakoodinlukijan tulos. (testaustarkoitukseen, väliaikainen)
+            AlertDialog.Builder builder = new AlertDialog.Builder(eranSkannausActivity.this);
+            builder.setTitle("Tulos");
+            builder.setMessage(result.getContents());
+
+            TextView txtView = (TextView)findViewById(R.id.tvSkannattuTuote);
+            splitString(result.getContents());
+            txtView.setText("Tuotteen nimi: " + nextSixChars + " - Tuotteen paino: " + nextFourChars + " grammaa");
+
+
+
+            // Lisätään OK button hälytysikkunaan ja asetetaan sille klikkaustapahtuman kuuntelija, joka sulkee ikkunan, kun sitä painetaan.
+            builder.setPositiveButton("OK", new DialogInterface.OnClickListener()
+            {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i)
+                {
+                    dialogInterface.dismiss();
+                }
+            }).show();
+        }
+    });
+
+    // jakaa barcoden eri osat muuttujiin
+    public void splitString(String x) {
+        //firstTwoChars = x.substring(0, 2);
+        nextSixChars = x.substring(2, 8);
+        nextFourChars = x.substring(8, 12);
+        //lastChar = x.substring(12, 13);
+
+
+    }
+
+    // tarkistaa että koodi on oikeanlainen
+    public static boolean tarkistakoodi(String y) {
+        if (y == null || y.length() != 13) {
+            return false; // y on null tai ei ole 13 merkkiä pitkä
+        }
+
+        // tarkista, että y sisältää vain numeroita
+        for (char c : y.toCharArray()) {
+            if (!Character.isDigit(c)) {
+                return false; // y sisältää muita kuin numeroita
+            }
+        }
+
+        // tarkista, että kahdella ensimmäisellä merkillä on arvot "1" ja "4"
+        if (y.charAt(0) != '1' || y.charAt(1) != '4') {
+            return false; // kahdella ensimmäisellä merkillä ei ole arvoja "1" ja "4"
+        }
+
+        return true; // y on kelvollinen
+    }
+
+    // generoi random id:n
+    public static String generateRandomID() {
+        UUID uuid = UUID.randomUUID();
+        return uuid.toString();
     }
 
 }
