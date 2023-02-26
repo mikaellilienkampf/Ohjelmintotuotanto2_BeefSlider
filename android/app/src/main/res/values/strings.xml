@@ -31,4 +31,10 @@
     <string name="anna_tuotteen_hinta">Anna tuotteen hinta...</string>
     <string name="lis_uusi_tuote">Lisää uusi tuote</string>
     <string name="testi">Testi...</string>                           <!-- "Listaa tuote" -buttonin teksti -->
+
+    <!-- activity_ohjelman_asetukset.xml / ohjelmanAsetuksetActivityn sisältö -->
+    <string name="settings2">Ohjelman asetukset</string>
+    <string name="theme">Teema</string>
+    <string name="default_email">Oletussähköpostiosoite</string>
+    <string name="edit_email">Muokkaa</string>
 </resources>

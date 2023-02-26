@@ -7,22 +7,33 @@
     tools:context=".ohjelmanAsetuksetActivity">
 
     <TextView
+        android:id="@+id/tvOletusSahkopostiosoiteOtsikko"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="104dp"
+        android:text="@string/default_email"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvAsetuksetOtsikko" />
+
+    <TextView
         android:id="@+id/tvAsetuksetOtsikko"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="48dp"
-        android:text="ASETUKSET \nTODO\n\nOletussähköposti ym."
+        android:text="@string/settings2"
         android:textAlignment="center"
+        android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/textView"
+        android:id="@+id/tvTeema"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:text="Teema:"
+        android:text="@string/theme"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tvAsetuksetOtsikko" />
 
@@ -31,11 +42,32 @@
         android:layout_width="229dp"
         android:layout_height="60dp"
         android:layout_marginStart="16dp"
+        android:checked="false"
         android:text="Night Mode"
         android:textSize="24dp"
         android:textStyle="bold"
-        android:checked="false"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView" />
+        app:layout_constraintTop_toBottomOf="@+id/tvTeema" />
+
+    <TextView
+        android:id="@+id/tvAsetettuSahkopostiosoite"
+        android:layout_width="266dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:textSize="24dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvOletusSahkopostiosoiteOtsikko" />
+
+    <ImageButton
+        android:id="@+id/ibMuokkaaAsetettuaSahkopostiosoitetta"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="188dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.479"
+        app:layout_constraintStart_toEndOf="@+id/tvAsetettuSahkopostiosoite"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@android:drawable/ic_menu_edit" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
