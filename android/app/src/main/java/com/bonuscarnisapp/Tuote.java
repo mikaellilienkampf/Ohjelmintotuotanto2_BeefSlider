@@ -1,5 +1,7 @@
 package com.bonuscarnisapp;
 
+import android.text.Editable;
+
 import androidx.annotation.NonNull;
 
 /**
@@ -15,8 +17,8 @@ public class Tuote {
     private String nimi;
     private float hinta;
 
-    Tuote() {
-    }
+    Tuote(Editable text, Editable textAnnaTuoteNimiText, Editable textAnnaHintaText) {
+    } //jaajaa tähän tuli tämmöinen editable :D ... katsotaan toimiiko testi mielessä.
 
     Tuote(int id, String nimi, Float hinta) {
         this.id = id;
