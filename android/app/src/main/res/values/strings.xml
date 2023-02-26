@@ -28,5 +28,7 @@
     <string name="anna_EAN_koodi" />
     <string name="anna_ean_koodi">Anna EAN koodi...</string>
     <string name="anna_tuotteen_nimi">Anna tuotteen nimi...</string>
-    <string name="anna_tuotteen_hinta">Anna tuotteen hinta...</string>                           <!-- "Listaa tuote" -buttonin teksti -->
+    <string name="anna_tuotteen_hinta">Anna tuotteen hinta...</string>
+    <string name="lis_uusi_tuote">Lisää uusi tuote</string>
+    <string name="testi">Testi...</string>                           <!-- "Listaa tuote" -buttonin teksti -->
 </resources>

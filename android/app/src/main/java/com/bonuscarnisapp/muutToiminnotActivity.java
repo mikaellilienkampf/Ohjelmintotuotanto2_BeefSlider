@@ -1,14 +1,22 @@
 package com.bonuscarnisapp;
 
+import android.content.Intent;
+import android.os.Bundle;
+import android.view.MenuItem;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.Button;
+import android.widget.PopupMenu;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.content.Intent;
-import android.os.Bundle;
-import android.view.MenuItem;
-
 public class muutToiminnotActivity extends AppCompatActivity {
+
+
+    private Button buttonLisaa;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -19,7 +27,19 @@ public class muutToiminnotActivity extends AppCompatActivity {
         // ...ActionBarin Paluu-painike näkyviin
         actionBar.setDisplayHomeAsUpEnabled(true);
         actionBar.setTitle("Muita toimintoja");
+
+
+        // LisaaUusituote -painikkeen toiminnallisuus
+        buttonLisaa = findViewById(R.id.btLisaaUusiTuote);
+        buttonLisaa.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                avaaLisaaUusiTuote();
+            }
+        });
+
     }
+
     /*
     Metodi, joka palauttaa ohjelman päävalikkoon, kun käyttäjä painaa ActionBarissa olevaa nuolta.
     Ei kysy käyttäjältä erillistä varmistusta.
@@ -34,4 +54,14 @@ public class muutToiminnotActivity extends AppCompatActivity {
         }
         return super.onOptionsItemSelected(item);
     }
+
+
+    /*
+     Metodi, joka määrittää mitä tapahtuu, kun käyttäjä painaa btLisaauusiTuote-painiketta
+     */
+    public void avaaLisaaUusiTuote(){
+        Intent intent = new Intent(this, lisaaUusiTuoteActivity.class);
+        startActivity(intent);
+    }
+
 }

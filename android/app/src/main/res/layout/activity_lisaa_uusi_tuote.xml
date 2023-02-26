@@ -7,58 +7,57 @@
     tools:context=".lisaaUusiTuoteActivity">
 
     <EditText
-        android:id="@+id/tuotteenPainoText"
-        android:layout_width="239dp"
-        android:layout_height="77dp"
-        android:layout_marginTop="400dp"
+        android:id="@+id/textAnnaHinta"
+        android:layout_width="297dp"
+        android:layout_height="85dp"
+        android:layout_marginTop="320dp"
         android:autofillHints=""
-        android:ems="15"
+        android:ems="10"
+        android:hint="Anna tuotteen hinta..."
         android:inputType="textPersonName"
-        android:text="@string/anna_tuotteen_hinta"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:ignore="LabelFor,TextSizeCheck" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
-        android:id="@+id/tuoteNimiText"
-        android:layout_width="239dp"
-        android:layout_height="77dp"
-        android:layout_marginTop="280dp"
+        android:id="@+id/textAnnaTuoteNimi"
+        android:layout_width="297dp"
+        android:layout_height="85dp"
+        android:layout_marginTop="196dp"
         android:autofillHints=""
-        android:ems="15"
+        android:ems="10"
+        android:hint="Anna tuotteen nimi..."
         android:inputType="textPersonName"
-        android:text="@string/anna_tuotteen_nimi"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:ignore="LabelFor" />
-
-    <EditText
-        android:id="@+id/eanKoodiText"
-        android:layout_width="239dp"
-        android:layout_height="77dp"
-        android:layout_marginTop="152dp"
-        android:autofillHints=""
-        android:ems="15"
-        android:inputType="textPersonName"
-        android:text="@string/anna_ean_koodi"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:ignore="LabelFor" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <Button
         android:id="@+id/tallennaButton"
         android:layout_width="257dp"
         android:layout_height="75dp"
+        android:layout_marginTop="456dp"
         android:text="@string/tallenna"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        tools:ignore="MissingConstraints"
-        tools:layout_editor_absoluteY="568dp" />
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="MissingConstraints" />
+
+    <EditText
+        android:id="@+id/textAnnaEan"
+        android:layout_width="297dp"
+        android:layout_height="85dp"
+        android:layout_marginTop="71dp"
+        android:autofillHints=""
+        android:ems="10"
+        android:hint="Anna EAN koodi..."
+        android:inputType="textPersonName"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
