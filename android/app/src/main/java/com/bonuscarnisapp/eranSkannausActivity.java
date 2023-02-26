@@ -7,7 +7,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -27,9 +29,20 @@ public class eranSkannausActivity extends AppCompatActivity {
     String nextFourChars;
     String lastChar;
 
+    private SharedPreferences sharedPref;
+    private boolean isDarkTheme;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        // Aseta teema
+        sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
+        isDarkTheme = sharedPref.getBoolean("darkTheme", false);
+        if (isDarkTheme) {
+            setTheme(R.style.DarkTheme);
+        } else {
+            setTheme(R.style.LightTheme);
+        }
         setContentView(R.layout.activity_eran_skannaus);
 
         // Paluu-painike Actionbariin...
