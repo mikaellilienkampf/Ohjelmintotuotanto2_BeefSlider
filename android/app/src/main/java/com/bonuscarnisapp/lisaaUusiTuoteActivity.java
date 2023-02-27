@@ -57,8 +57,16 @@ public class lisaaUusiTuoteActivity extends AppCompatActivity {
             //metodi jolla luodaan tuote olio ja lisätään tiedot tuote listaan, kun tallenna nappia painetaan.
             public void onClick(View v) {
 
+                /*
                 //Tarkistetaan että EAN on 13 merkkiä pitkä.
                 if (textAnnaEan.getText().length()!= 13) {
+                    Toast.makeText(getApplicationContext(), "EAN virheellinen", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                */
+
+                //Tarkistetaan, ettei EAN koodi puutu
+                if (TextUtils.isEmpty(textAnnaEan.getText())) {
                     Toast.makeText(getApplicationContext(), "EAN virheellinen", Toast.LENGTH_SHORT).show();
                     return;
                 }
@@ -80,7 +88,7 @@ public class lisaaUusiTuoteActivity extends AppCompatActivity {
                 //Lisätään listaan
                 tuoteArrayList.add(tuote);
 
-                //Tiedosto kansio pitää olla luotu ensin eli kansiota ei ole vielä luotu.
+                //Tiedosto kansio pitää olla luotu ensin eli nyt tiedosto puuttuu.
                 // Tallennetaan tiedot tiedostoon tuotteet.csv. HUOM. Tuote oliosta tehty editable Tuote.javaan.
                 //pitää muuttaa tyyppiä jos ei toimi String line = t.getId() + "," + t.getNimi() + "," + t.getHinta()
                 try {
