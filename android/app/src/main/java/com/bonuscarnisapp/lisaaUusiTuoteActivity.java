@@ -4,13 +4,19 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 
 public class lisaaUusiTuoteActivity extends AppCompatActivity {
@@ -47,11 +53,57 @@ public class lisaaUusiTuoteActivity extends AppCompatActivity {
         tallenna.setOnClickListener(new View.OnClickListener() {
 
             @Override
-            //tästä tehty editable Tuote.javaan...
-            //metodi jolla luodaan tuote olio ja lisätään tiedot tuote listaan kun tallenna nappia painetaan.
+            //Tuote oliosta tehty editable Tuote.javaan...
+            //metodi jolla luodaan tuote olio ja lisätään tiedot tuote listaan, kun tallenna nappia painetaan.
             public void onClick(View v) {
+
+                //Tarkistetaan että EAN on 13 merkkiä pitkä.
+                if (textAnnaEan.getText().length()!= 13) {
+                    Toast.makeText(getApplicationContext(), "EAN virheellinen", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                //Tarkistetaan, ettei nimi puutu.
+                if (TextUtils.isEmpty(textAnnaTuoteNimi.getText())) {
+                    Toast.makeText(getApplicationContext(), "Tuotteen nimi puuttuu", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                //Tarkistetaan ettei hinta puutu.
+                if (TextUtils.isEmpty(textAnnaHinta.getText())) {
+                    Toast.makeText(getApplicationContext(), "Hinta puuttuu", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                //Luodaan uusi tuote olio, joka saa arvokseen ean, nimen ja hinnan.
                 Tuote tuote = new Tuote(textAnnaEan.getText(), textAnnaTuoteNimi.getText(), textAnnaHinta.getText());
+                //Lisätään listaan
                 tuoteArrayList.add(tuote);
+
+                //Tiedosto kansio pitää olla luotu ensin eli kansiota ei ole vielä luotu.
+                // Tallennetaan tiedot tiedostoon tuotteet.csv. HUOM. Tuote oliosta tehty editable Tuote.javaan.
+                //pitää muuttaa tyyppiä jos ei toimi String line = t.getId() + "," + t.getNimi() + "," + t.getHinta()
+                try {
+                    FileOutputStream fos = openFileOutput("tuotteet.csv", Context.MODE_PRIVATE);
+
+                    for (Tuote t : tuoteArrayList) {
+                        String line = t.getId() + "," + t.getNimi() + "," + t.getHinta() + "\n";
+                        fos.write(line.getBytes());
+                    }
+                    fos.close();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    Toast.makeText(getApplicationContext(), "Tallentaminen epäonnistui", Toast.LENGTH_SHORT).show();
+                }
+
+                //Näytölle tuleva ilmoitus tallennuksen onnistumisesta
+                Toast.makeText(getApplicationContext(), "TIEDOT TALLENNETTU", Toast.LENGTH_LONG).show();
+
+
+                //Pyyhitään tekstikentät tyhjiksi automaattisesti, jos tallennus onnistui.
+                textAnnaEan.setText("");
+                textAnnaTuoteNimi.setText("");
+                textAnnaHinta.setText("");
             }
         });
 
