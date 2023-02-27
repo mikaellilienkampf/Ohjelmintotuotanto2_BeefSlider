@@ -28,6 +28,9 @@ public class eranSkannausActivity extends AppCompatActivity {
     String nextSixChars;
     String nextFourChars;
     String lastChar;
+    int skannattujenmaara;
+    Button listaanappi;
+    int kokopaino;
 
     private SharedPreferences sharedPref;
     private boolean isDarkTheme;
@@ -66,6 +69,20 @@ public class eranSkannausActivity extends AppCompatActivity {
                 aloitaSkannaus(buttonAloitaSkannaus);
             }
         });
+
+
+        listaanappi =findViewById(R.id.btListaaTuote);
+
+
+        listaanappi.setOnClickListener(v->
+        {
+
+            skannattujenmaara = skannattujenmaara + 1;
+            kokopaino = kokopaino + Integer.parseInt(nextFourChars);
+            TextView txtView2 = (TextView)findViewById(R.id.tvYhteenvetoSkannauksista);
+            txtView2.setText("Tuotteita yht: " + skannattujenmaara + " - Tuotteitten paino: " + kokopaino + " grammaa");
+        });
+
     }
 
     /*
@@ -83,6 +100,9 @@ public class eranSkannausActivity extends AppCompatActivity {
     Metodi, joka palauttaa ohjelman päävalikkoon, kun käyttäjä painaa ActionBarissa olevaa nuolta.
     Kysyy käyttäjältä varmistuksen.
      */
+
+
+
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
 
@@ -149,7 +169,6 @@ public class eranSkannausActivity extends AppCompatActivity {
             txtView.setText("Tuotteen nimi: " + nextSixChars + " - Tuotteen paino: " + nextFourChars + " grammaa");
 
 
-
             // Lisätään OK button hälytysikkunaan ja asetetaan sille klikkaustapahtuman kuuntelija, joka sulkee ikkunan, kun sitä painetaan.
             builder.setPositiveButton("OK", new DialogInterface.OnClickListener()
             {
@@ -185,9 +204,9 @@ public class eranSkannausActivity extends AppCompatActivity {
             }
         }
 
-        // tarkista, että kahdella ensimmäisellä merkillä on arvot "1" ja "4"
-        if (y.charAt(0) != '1' || y.charAt(1) != '4') {
-            return false; // kahdella ensimmäisellä merkillä ei ole arvoja "1" ja "4"
+        // tarkista, että kahdella ensimmäisellä merkillä on arvot "2" ja "9"
+        if (y.charAt(0) != '2' || y.charAt(1) != '8') {
+            return false; // kahdella ensimmäisellä merkillä ei ole arvoja "2" ja "8"
         }
 
         return true; // y on kelvollinen
