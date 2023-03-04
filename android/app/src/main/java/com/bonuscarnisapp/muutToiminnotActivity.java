@@ -19,6 +19,7 @@ public class muutToiminnotActivity extends AppCompatActivity {
     private Button buttonLisaa;
 
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -30,7 +31,7 @@ public class muutToiminnotActivity extends AppCompatActivity {
         actionBar.setTitle("Muita toimintoja");
 
 
-        // LisaaUusituote -painikkeen toiminnallisuus
+        // Tuotelista muokkaus -painikkeen toiminnallisuus
         buttonLisaa = findViewById(R.id.btLisaaUusiTuote);
         buttonLisaa.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -38,6 +39,8 @@ public class muutToiminnotActivity extends AppCompatActivity {
                 avaaLisaaUusiTuote();
             }
         });
+
+
 
     }
 
@@ -64,5 +67,7 @@ public class muutToiminnotActivity extends AppCompatActivity {
         Intent intent = new Intent(this, lisaaUusiTuoteActivity.class);
         startActivity(intent);
     }
+
+
 
 }

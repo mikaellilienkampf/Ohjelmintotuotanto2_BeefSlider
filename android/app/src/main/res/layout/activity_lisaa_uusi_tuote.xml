@@ -8,38 +8,37 @@
 
     <EditText
         android:id="@+id/textAnnaHinta"
-        android:layout_width="297dp"
-        android:layout_height="85dp"
-        android:layout_marginTop="320dp"
+        android:layout_width="299dp"
+        android:layout_height="57dp"
+        android:layout_marginTop="200dp"
         android:autofillHints=""
         android:ems="10"
-        android:hint="Anna tuotteen hinta..."
-        android:inputType="textPersonName"
+        android:hint="Hinta..."
+        android:inputType="none"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintHorizontal_bias="0.491"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
         android:id="@+id/textAnnaTuoteNimi"
-        android:layout_width="297dp"
-        android:layout_height="85dp"
-        android:layout_marginTop="196dp"
+        android:layout_width="301dp"
+        android:layout_height="52dp"
+        android:layout_marginTop="128dp"
         android:autofillHints=""
         android:ems="10"
-        android:hint="Anna tuotteen nimi..."
-        android:inputType="textPersonName"
+        android:hint="Tuotteen nimi..."
+        android:inputType="none"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
         android:id="@+id/tallennaButton"
-        android:layout_width="257dp"
-        android:layout_height="75dp"
-        android:layout_marginTop="456dp"
-        android:text="@string/tallenna"
+        android:layout_width="277dp"
+        android:layout_height="73dp"
+        android:layout_marginTop="308dp"
+        android:text="Lisää"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
@@ -48,13 +47,47 @@
 
     <EditText
         android:id="@+id/textAnnaEan"
-        android:layout_width="297dp"
-        android:layout_height="85dp"
-        android:layout_marginTop="71dp"
+        android:layout_width="305dp"
+        android:layout_height="55dp"
+        android:layout_marginTop="56dp"
         android:autofillHints=""
         android:ems="10"
-        android:hint="Anna EAN koodi..."
-        android:inputType="textPersonName"
+        android:hint="EAN koodi..."
+        android:inputType="number"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.518"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/bt_poista"
+        android:layout_width="274dp"
+        android:layout_height="68dp"
+        android:layout_marginTop="580dp"
+        android:text="Poista"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.503"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/bt_hae"
+        android:layout_width="278dp"
+        android:layout_height="67dp"
+        android:layout_marginTop="400dp"
+        android:text="Hae"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/tallennaButton"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/bt_paivita"
+        android:layout_width="274dp"
+        android:layout_height="70dp"
+        android:layout_marginTop="488dp"
+        android:text="Päivitä"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"

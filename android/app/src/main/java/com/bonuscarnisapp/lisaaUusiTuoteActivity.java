@@ -2,11 +2,14 @@ package com.bonuscarnisapp;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Editable;
 import android.text.TextUtils;
 import android.view.MenuItem;
 import android.view.View;
@@ -18,16 +21,20 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class lisaaUusiTuoteActivity extends AppCompatActivity {
 
+    private Button bt_hae;
+    private Button bt_poista;
     private Button tallenna;
+
+    private Button bt_paivita;
     private EditText textAnnaEan;
     private EditText textAnnaTuoteNimi;
     private EditText textAnnaHinta;
 
     static ArrayList<Tuote> tuoteArrayList = new ArrayList<Tuote>();
-
 
 
     @Override
@@ -39,17 +46,18 @@ public class lisaaUusiTuoteActivity extends AppCompatActivity {
         ActionBar actionBar = getSupportActionBar();
         // ActionBarin Paluu-painike näkyviin
         actionBar.setDisplayHomeAsUpEnabled(true);
-        actionBar.setTitle("Lisää uusi tuote");
+        actionBar.setTitle("Lisää ja muokkaa tuotteita");
 
         // Nimi-muuttujat talteen
         textAnnaEan = findViewById(R.id.textAnnaEan);
-
         textAnnaTuoteNimi = findViewById(R.id.textAnnaTuoteNimi);
-
         textAnnaHinta = findViewById(R.id.textAnnaHinta);
-
-        // Tallenna-painikkeen toiminnallisuus
         tallenna = findViewById(R.id.tallennaButton);
+        bt_poista = findViewById(R.id.bt_poista);
+        bt_hae = findViewById(R.id.bt_hae);
+        bt_paivita = findViewById(R.id.bt_paivita);
+
+        // lisää-painikkeen toiminnallisuus
         tallenna.setOnClickListener(new View.OnClickListener() {
 
             @Override
@@ -57,13 +65,6 @@ public class lisaaUusiTuoteActivity extends AppCompatActivity {
             //metodi jolla luodaan tuote olio ja lisätään tiedot tuote listaan, kun tallenna nappia painetaan.
             public void onClick(View v) {
 
-                /*
-                //Tarkistetaan että EAN on 13 merkkiä pitkä.
-                if (textAnnaEan.getText().length()!= 13) {
-                    Toast.makeText(getApplicationContext(), "EAN virheellinen", Toast.LENGTH_SHORT).show();
-                    return;
-                }
-                */
 
                 //Tarkistetaan, ettei EAN koodi puutu
                 if (TextUtils.isEmpty(textAnnaEan.getText())) {
@@ -82,6 +83,9 @@ public class lisaaUusiTuoteActivity extends AppCompatActivity {
                     Toast.makeText(getApplicationContext(), "Hinta puuttuu", Toast.LENGTH_SHORT).show();
                     return;
                 }
+
+                //TÄHÄN VARMENNUS JOKA TARKISTAA LÖYTYYKÖ EAN KOODI JO TIEDOSTOSTA...
+
 
                 //Luodaan uusi tuote olio, joka saa arvokseen ean, nimen ja hinnan.
                 Tuote tuote = new Tuote(textAnnaEan.getText(), textAnnaTuoteNimi.getText(), textAnnaHinta.getText());
@@ -115,21 +119,140 @@ public class lisaaUusiTuoteActivity extends AppCompatActivity {
             }
         });
 
+        // Hae-painikkeen toiminnallisuus
+        bt_hae.setOnClickListener(new View.OnClickListener() {
+            @Override
+            //metodi jolla haetaan  olio
+            public void onClick(View v) {
+                //haetaan syötetty EAN-koodi
+                String ean = textAnnaEan.getText().toString();
+
+                //etsitään tuoteArrayListasta tuote, jolla on annettu EAN-koodi
+                for (Tuote t : tuoteArrayList) {
+                    if (Objects.equals(t.getId(), ean)) {
+                        //jos tuote löytyy, täytetään sen tiedot tekstikenttiin
+                        textAnnaTuoteNimi.setText(t.getNimi());
+                        textAnnaHinta.setText((int) t.getHinta());
+                        return;
+                    }
+                }
+
+                //jos tuotetta ei löydy, annetaan käyttäjälle ilmoitus
+                Toast.makeText(getApplicationContext(), "Tuotetta ei löytynyt", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        // Poista-painikkeen toiminnallisuus
+        bt_poista.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //haetaan syötetty EAN-koodi
+                String ean = textAnnaEan.getText().toString();
+
+                //etsitään tuoteArrayLististasta tuotetta
+                for (Tuote t : tuoteArrayList) {
+                    if (Objects.equals(t.getId(), ean)) {
+                        //kysytään käyttäjältä varmistus tuotteen poistamisesta
+                        AlertDialog.Builder builder = new AlertDialog.Builder(lisaaUusiTuoteActivity.this);
+                        builder.setMessage("Haluatko varmasti poistaa tuotteen?")
+                                .setPositiveButton("Kyllä", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        //poistetaan tuote tuoteArrayListasta
+                                        tuoteArrayList.remove(t);
+                                        //päivitetään tiedot tiedostoon
+                                        try {
+                                            FileOutputStream fos = openFileOutput("tuotteet.csv", Context.MODE_PRIVATE);
+                                            for (Tuote t : tuoteArrayList) {
+                                                String line = t.getId() + "," + t.getNimi() + "," + t.getHinta() + "\n";
+                                                fos.write(line.getBytes());
+                                            }
+                                            fos.close();
+                                        } catch (Exception e) {
+                                            e.printStackTrace();
+                                            Toast.makeText(getApplicationContext(), "Tallentaminen epäonnistui", Toast.LENGTH_SHORT).show();
+                                        }
+                                        //tyhjennetään kentät
+                                        textAnnaEan.setText("");
+                                        textAnnaTuoteNimi.setText("");
+                                        textAnnaHinta.setText("");
+                                        //annetaan käyttäjälle ilmoitus poistamisen onnistumisesta
+                                        Toast.makeText(getApplicationContext(), "Tuote poistettu", Toast.LENGTH_SHORT).show();
+                                    }
+                                })
+                                .setNegativeButton("Peruuta", null);
+                        AlertDialog alert = builder.create();
+                        alert.show();
+                        return;
+                    }
+                }
+
+            }
+        });
+
+        // Päivitä-painikkeen toiminnallisuus
+        bt_paivita.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //haetaan syötetty EAN-koodi
+                String ean = textAnnaEan.getText().toString();
+
+                //etsitään tuoteArrayListasta tuote
+                for (Tuote t : tuoteArrayList) {
+                    if (Objects.equals(t.getId(), ean)) {
+                        //päivitetään olion tiedot tekstikenttien mukaisesti
+                        t.setNimi(textAnnaTuoteNimi.getText().toString());
+                        t.setHinta(Float.parseFloat(textAnnaHinta.getText().toString()));
+
+                        //tallennetaan päivitetty lista tiedostoon
+                        tallennaTiedot();
+                    }
+
+                    //annetaan käyttäjälle ilmoitus päivityksen onnistumisesta
+                    Toast.makeText(getApplicationContext(), "Tiedot päivitetty", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+            }
+
+        });
+
     }
+
+    //metodi joka tallentaa tuoteArrayListin tiedot tiedostoon
+    private void tallennaTiedot() {
+        try {
+            FileOutputStream fos = openFileOutput("tuotteet.csv", Context.MODE_PRIVATE);
+
+            for (Tuote t : tuoteArrayList) {
+                String line = t.getId() + "," + t.getNimi() + "," + t.getHinta() + "\n";
+                fos.write(line.getBytes());
+            }
+            fos.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+            Toast.makeText(getApplicationContext(), "Tallentaminen epäonnistui", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+
 
     /*
     Metodi, joka palauttaa ohjelman muutToiminnot luokkaan, kun käyttäjä painaa ActionBarissa olevaa nuolta.
     Ei kysy käyttäjältä erillistä varmistusta.
      */
-    @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                // Palaa muutToiminnot luokkaan
-                Intent intent = new Intent(lisaaUusiTuoteActivity.this, muutToiminnotActivity.class);
-                startActivity(intent);
+        @Override
+        public boolean onOptionsItemSelected (@NonNull MenuItem item){
+            switch (item.getItemId()) {
+                case android.R.id.home:
+                    // Palaa muutToiminnot luokkaan
+                    Intent intent = new Intent(lisaaUusiTuoteActivity.this, muutToiminnotActivity.class);
+                    startActivity(intent);
+            }
+            return super.onOptionsItemSelected(item);
         }
-        return super.onOptionsItemSelected(item);
+
     }
 
-}
+
+
+

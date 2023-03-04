@@ -6,28 +6,16 @@
     android:layout_height="match_parent"
     tools:context=".muutToiminnotActivity">
 
-    <TextView
-        android:id="@+id/tvTODO2"
-        android:layout_width="188dp"
-        android:layout_height="125dp"
-        android:layout_marginTop="280dp"
-        android:text="Tänne jotain vähemmän oleellisia toimintoja"
-        android:textAlignment="center"
-        android:textSize="15dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.56"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
     <Button
         android:id="@+id/btLisaaUusiTuote"
-        android:layout_width="408dp"
-        android:layout_height="69dp"
+        android:layout_width="277dp"
+        android:layout_height="72dp"
         android:layout_marginTop="96dp"
-        android:text="@string/lis_uusi_tuote"
+        android:text="@string/tuotelistan_muokkaus"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="TextSizeCheck" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

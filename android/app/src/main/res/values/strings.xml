@@ -37,4 +37,14 @@
     <string name="theme">Teema</string>
     <string name="default_email">Oletussähköpostiosoite</string>
     <string name="edit_email">Muokkaa</string>
+    <string name="lista">Lista</string>
+    <string name="hinta">Hinta</string>
+    <string name="hae_ean">Hae EAN...</string>
+    <string name="tuote">Tuote</string>
+    <string name="hae">Hae</string>
+    <string name="p_ivit">Päivitä</string>
+    <string name="poista">Poista</string>
+    <string name="lis">Lisää</string>
+    <string name="ean">EAN</string>
+    <string name="tuotelistan_muokkaus">Tuotelistan muokkaus</string>
 </resources>
