@@ -37,6 +37,7 @@
     <string name="theme">Teema</string>
     <string name="default_email">Oletussähköpostiosoite</string>
     <string name="edit_email">Muokkaa</string>
+    <string name="test_email">Testaa sähköpostin toimivuus</string>
     <string name="lista">Lista</string>
     <string name="hinta">Hinta</string>
     <string name="hae_ean">Hae EAN...</string>

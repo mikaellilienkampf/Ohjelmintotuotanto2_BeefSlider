@@ -18,6 +18,7 @@ import android.text.InputType;
 import android.view.MenuItem;
 
 import android.view.View;
+import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -25,7 +26,7 @@ import android.widget.Switch;
 import android.widget.TextView;
 
 
-public class ohjelmanAsetuksetActivity extends AppCompatActivity {
+public class ohjelmanAsetuksetActivity extends AppCompatActivity implements View.OnClickListener {
 
     // tvAsetettuSahkopostiosoite
     private TextView textViewAsetettuSahkopostiosoite;
@@ -34,6 +35,10 @@ public class ohjelmanAsetuksetActivity extends AppCompatActivity {
     private Switch switchTeema;
     private SharedPreferences sharedPref;
     private boolean isDarkTheme;
+    private Button buttonSahkoposti;
+    @Override
+    public void onClick(View view) {
+    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -53,7 +58,7 @@ public class ohjelmanAsetuksetActivity extends AppCompatActivity {
         // ...ActionBarin Paluu-painike näkyviin
         actionBar.setDisplayHomeAsUpEnabled(true);
         // Päivitetään otsikko
-        actionBar.setTitle("... palaa alkuvalikkoon");
+        actionBar.setTitle("");
 
         switchTeema = findViewById(R.id.switchTeema);
 
@@ -79,7 +84,7 @@ public class ohjelmanAsetuksetActivity extends AppCompatActivity {
         String oletussahkoposti = sharedPref.getString("defaultEmail", null);
         textViewAsetettuSahkopostiosoite = findViewById(R.id.tvAsetettuSahkopostiosoite);
         if(oletussahkoposti == null){
-            textViewAsetettuSahkopostiosoite.setTextSize(14);
+            textViewAsetettuSahkopostiosoite.setTextSize(12);
             textViewAsetettuSahkopostiosoite.setTextColor(Color.RED);
             textViewAsetettuSahkopostiosoite.setText("Sähköpostiosoitetta ei ole vielä asetettu!");
         } else {
@@ -92,7 +97,7 @@ public class ohjelmanAsetuksetActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 AlertDialog.Builder alert = new AlertDialog.Builder(v.getContext());
-                alert.setTitle("Aseta uusi oletussähköpostiosoite");
+                alert.setTitle("Aseta uusi oletussähköpostiosoite tai muokkaa nykyisen salasanaa.");
 
                 // EditText, johon uusi sähköpostiosoite kirjoitetaan
                 final EditText input = new EditText(v.getContext());
@@ -116,11 +121,73 @@ public class ohjelmanAsetuksetActivity extends AppCompatActivity {
                         // Peru sähköpostiosoitteen muokkaus
                     }
                 });
+                // Salasana
+                alert.setNeutralButton("Salasana", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int whichButton) {
+                        AlertDialog.Builder alert2 = new AlertDialog.Builder(v.getContext());
+                        alert2.setTitle("Aseta salasana");
+
+                        // EditText, johon salasana kirjoitetaan
+                        final EditText input2 = new EditText(v.getContext());
+                        input2.setInputType(InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD); // Olettaa syötteen olevan salasana
+                        alert2.setView(input2);
+
+                        // Toiminnallisuus, kun käyttäjä klikkaa "Vahvista"
+                        alert2.setPositiveButton("Vahvista", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int whichButton) {
+                                // Testataan salasanan pituus (tulisi olla Gmailissa 16 merkkiä
+                                if(input2.getText().toString().length() != 16){
+                                    AlertDialog.Builder alert3 = new AlertDialog.Builder(v.getContext());
+                                    alert3.setTitle("Oletko varma, että salasana on oikein?");
+                                    alert3.setMessage("Gmailin salasanan pitäisi olla 16-merkkinen");
+                                    // Toiminnallisuus, kun käyttäjä klikkaa "Vahvista"
+                                    alert3.setPositiveButton("Vahvista", new DialogInterface.OnClickListener() {
+                                        public void onClick(DialogInterface dialog, int whichButton) {
+                                            // Tallennetaan uusi salasana SharedPreferensseihin
+                                            // Testauksen ja kehityksen ajan pois toiminnasta!
+                                            //SharedPreferences.Editor editor2 = sharedPref.edit();
+                                            //editor2.putString("defaultEmailPassword", input2.getText().toString());
+                                            //editor2.commit();
+                                        }
+                                    });
+                                    // Toiminnallisuus, kun käyttäjä klikkaa "Peruuta"
+                                    alert3.setNegativeButton("Peruuta", new DialogInterface.OnClickListener() {
+                                        public void onClick(DialogInterface dialog, int whichButton) {
+                                            // Peru salasanan muokkaus
+                                        }
+                                    });
+                                    alert3.show();
+                                }
+                                // Tallennetaan uusi salasana SharedPreferensseihin
+                                SharedPreferences.Editor editor3 = sharedPref.edit();
+                                editor3.putString("defaultEmailPassword", input2.getText().toString());
+                                editor3.commit();
+                            }
+                        });
+                        // Toiminnallisuus, kun käyttäjä klikkaa "Peruuta"
+                        alert2.setNegativeButton("Peruuta", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int whichButton) {
+                                // Peru sähköpostiosoitteen muokkaus
+                            }
+                        });
+                        alert2.show(); // Alert2 näkyviin
+                    }
+                });
                 alert.show(); // Alert näkyviin
             }
         });
 
-
+        // sähköpostipainike
+        buttonSahkoposti = findViewById(R.id.btTestaaSahkopostinToimivuus);
+        buttonSahkoposti.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Luodaan Sahkopostiviesti-olio (parametreina context, viestin aihe ja sisältö)
+                Sahkopostiviesti sahkopostiviesti = new Sahkopostiviesti(getApplicationContext(), "Testiviesti", "Tämä on sovelluksen lähettämä testiviesti.");
+                // Lähetetään sähköpostiviesti (parametrina view)
+                sahkopostiviesti.lahetaSahkopostiviesti(v);
+            }
+        });
 
     }
 
