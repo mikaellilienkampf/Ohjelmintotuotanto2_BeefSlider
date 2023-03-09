@@ -1,8 +1,12 @@
 package com.bonuscarnisapp;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.net.Uri;
+import android.os.Handler;
+import android.os.Looper;
 import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.View;
@@ -34,8 +38,8 @@ import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
 
+
 public class Sahkopostiviesti {
-    //private SharedPreferences sharedPref;
     private Context context;
     private String viestinLahettaja;
     private String sahkopostinSalasana;
@@ -43,6 +47,7 @@ public class Sahkopostiviesti {
     private String viestinAihe;
     private String viestinSisalto;
     // private viestinLiite todo;
+
 
     // Parametriton konstruktori
     Sahkopostiviesti(){};
@@ -62,7 +67,8 @@ public class Sahkopostiviesti {
         // Viestin aihe, sisältö ja liitteet välitetään parametreina
         this.viestinAihe = viestinAihe;
         this.viestinSisalto = viestinSisalto;
-        // Liitteet todo
+        // Liitteet
+        //String[] viestinLiitteet = viestinLiitteet; // Ehkä jotenkin näin? Selviää, kun tietää mihin csv-tiedot tallennetaan...
     }
 
     // Metodi, joka lähettää sähköpostiviestin
@@ -94,7 +100,7 @@ public class Sahkopostiviesti {
             BodyPart messageBodyPart = new MimeBodyPart();
             messageBodyPart.setText(this.viestinSisalto); // Body
 
-            // Määritetään viestin liitteet
+            // Määritetään viestin liitteet todo
 
             // Kehitysvaiheessa: Luodaan testitiedosto getFilesDir()-hakemistoon
             String filename = "testiliite.txt";
@@ -140,21 +146,47 @@ public class Sahkopostiviesti {
             mc.addMailcap("message/rfc822;; x-java-content- handler=com.sun.mail.handlers.message_rfc822");
 
             // Hoidetaan viestin lähetys uudessa säikeessä
-            // HUOM. Pitäisikö käyttäjälle ilmoittaa onnistuiko/epäonnistuiko lähetys?
-            // Alertit hankalia toteuttaa, sillä lähetys ja siten myös poikkeustenhallinta eri säikeessä kuin varsinainen graafinen käyttöliittymä
             Thread thread = new Thread(new Runnable() {
                 @Override
                 public void run() {
                     try {
                         Transport.send(mimeMessage);
+                        Handler threadHandler = new Handler(Looper.getMainLooper());
+                        threadHandler.post(new Runnable() {
+                            @Override
+                            public void run(){
+                                AlertDialog.Builder alert = new AlertDialog.Builder(view.getContext());
+                                alert.setTitle("Sähköpostin lähetys onnistui!");
+                                alert.setMessage("Vastaanottajan sähköpostiosoite:\n" + stringReceiverEmail);
+                                alert.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int whichButton) {
+                                        // ei tehdä mitään
+                                    }
+                                });
+                                alert.show();
+                            }
+                        });
                     } catch (MessagingException e) {
                         e.printStackTrace();
+                        Handler threadHandler = new Handler(Looper.getMainLooper());
+                        threadHandler.post(new Runnable() {
+                            @Override
+                            public void run(){
+                                AlertDialog.Builder alert = new AlertDialog.Builder(view.getContext());
+                                alert.setTitle("Sähköpostin lähetys epäonnistui!");
+                                alert.setMessage("Tarkista sähköpostiosoite ja salasana.");
+                                alert.setPositiveButton("Sulje", new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int whichButton) {
+                                        // ei tehdä mitään
+                                    }
+                                });
+                                alert.show();
+                            }
+                        });
                     }
                 }
             });
             thread.start();
-        } catch (AddressException e) {
-            e.printStackTrace();
         } catch (MessagingException e) {
             e.printStackTrace();
         }
