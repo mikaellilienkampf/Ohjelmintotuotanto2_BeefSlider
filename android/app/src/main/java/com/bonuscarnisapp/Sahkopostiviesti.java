@@ -189,6 +189,18 @@ public class Sahkopostiviesti {
             thread.start();
         } catch (MessagingException e) {
             e.printStackTrace();
+            if (e instanceof AddressException) {
+                AlertDialog.Builder alert = new AlertDialog.Builder(view.getContext());
+                alert.setTitle("Vastaanottajaa ei ole määritetty!");
+                alert.setMessage("Aseta vastaanottajan osoite asetuksiin.");
+                alert.setPositiveButton("Sulje", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int whichButton) {
+                        // ei tehdä mitään
+                    }
+                });
+                alert.show();
+            }
         }
+
     }
 }

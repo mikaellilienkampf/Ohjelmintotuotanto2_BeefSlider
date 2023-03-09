@@ -84,11 +84,14 @@ public class ohjelmanAsetuksetActivity extends AppCompatActivity implements View
         // Haetaan aiemmin asetettu oletussähköposti tvAsetettuSahkopostiosoite-textViewiin
         String oletussahkoposti = sharedPref.getString("defaultEmail", null);
         textViewAsetettuSahkopostiosoite = findViewById(R.id.tvAsetettuSahkopostiosoite);
-        if(oletussahkoposti == null){
-            textViewAsetettuSahkopostiosoite.setTextSize(12);
+        textViewAsetettuSahkopostiosoite.setTextSize(20);
+        if(oletussahkoposti == null || oletussahkoposti.length() == 0){
+            textViewAsetettuSahkopostiosoite.setTextSize(13);
             textViewAsetettuSahkopostiosoite.setTextColor(Color.RED);
             textViewAsetettuSahkopostiosoite.setText("Sähköpostiosoitetta ei ole vielä asetettu!");
         } else {
+            textViewAsetettuSahkopostiosoite.setTextSize(20);
+            textViewAsetettuSahkopostiosoite.setTextColor(Color.BLACK);
             textViewAsetettuSahkopostiosoite.setText(oletussahkoposti);
         }
 
@@ -112,8 +115,15 @@ public class ohjelmanAsetuksetActivity extends AppCompatActivity implements View
                         editor.putString("defaultEmail", input.getText().toString());
                         editor.commit();
                         // Asetetaan myös tvAsetettuSahkopostiosoite-textViewiin
-                        textViewAsetettuSahkopostiosoite.setText(input.getText().toString());
-                        textViewAsetettuSahkopostiosoite.setTextColor(Color.BLACK); // Varmistetaan, että tekstin väri vaihtuu
+                        if(input.getText().toString().length() > 0) {
+                            textViewAsetettuSahkopostiosoite.setText(input.getText().toString());
+                            textViewAsetettuSahkopostiosoite.setTextSize(20);
+                            textViewAsetettuSahkopostiosoite.setTextColor(Color.BLACK); // Varmistetaan, että tekstin väri vaihtuu
+                        } else {
+                            textViewAsetettuSahkopostiosoite.setTextSize(13);
+                            textViewAsetettuSahkopostiosoite.setTextColor(Color.RED);
+                            textViewAsetettuSahkopostiosoite.setText("Sähköpostiosoitetta ei ole vielä asetettu!");
+                        }
                     }
                 });
                 // Toiminnallisuus, kun käyttäjä klikkaa "Peruuta"
