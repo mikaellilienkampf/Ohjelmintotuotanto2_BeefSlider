@@ -2,12 +2,22 @@ package com.bonuscarnisapp;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.preference.PreferenceManager;
+import android.util.Log;
 import android.view.View;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.util.Properties;
 
 import javax.activation.CommandMap;
+import javax.activation.DataHandler;
+import javax.activation.DataSource;
+import javax.activation.FileDataSource;
 import javax.activation.MailcapCommandMap;
 import javax.mail.Authenticator;
 import javax.mail.BodyPart;
@@ -15,6 +25,7 @@ import javax.mail.Message;
 import javax.mail.MessagingException;
 import javax.mail.Multipart;
 import javax.mail.PasswordAuthentication;
+import javax.mail.Quota;
 import javax.mail.Session;
 import javax.mail.Transport;
 import javax.mail.internet.AddressException;
@@ -84,16 +95,40 @@ public class Sahkopostiviesti {
             messageBodyPart.setText(this.viestinSisalto); // Body
 
             // Määritetään viestin liitteet
-            //MimeBodyPart attachmentPart = new MimeBodyPart();
-            //String filename = ""; // polku tiedostoon
-            //DataSource source = new FileDataSource(filename);
-            //attachmentPart.setDataHandler(new DataHandler(source));
-            //attachmentPart.setFileName(filename);
+
+            // Kehitysvaiheessa: Luodaan testitiedosto getFilesDir()-hakemistoon
+            String filename = "testiliite.txt";
+            String fileContents = "Tämä on testitiedosto sähköpostiviestin liitteeksi!";
+            try (FileOutputStream fos = context.openFileOutput(filename, Context.MODE_PRIVATE)) {
+                fos.write(fileContents.getBytes(StandardCharsets.UTF_8));
+            } catch (FileNotFoundException e) {
+                throw new RuntimeException(e);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+
+            /*
+            // Tällä voidaan listata Logcatiin getFilesDir()-kansiossa olevat tiedostot; helpottanee testausta
+            File directory = new File(this.context.getFilesDir().toString());
+            File[] files = directory.listFiles();
+            Log.d("Files", "Size: "+ files.length);
+            for (int i = 0; i < files.length; i++)
+            {
+                Log.d("Files", "FileName: " + files[i].getName());
+            }
+            */
+
+            // Luodaan viestiin liiteosa ja liitetään äsken luotu tiedosto siihen
+            MimeBodyPart attachmentPart = new MimeBodyPart();
+            File liitetiedosto = new File(this.context.getFilesDir(), filename);
+            DataSource source = new FileDataSource(liitetiedosto);
+            attachmentPart.setDataHandler(new DataHandler(source));
+            attachmentPart.setFileName(filename);
 
             // Liitetään varsinainen viestiosa ja liiteosa yhteen
             Multipart multipart = new MimeMultipart();
             multipart.addBodyPart(messageBodyPart);
-            //multipart.addBodyPart(attachmentPart);
+            multipart.addBodyPart(attachmentPart);
             mimeMessage.setContent(multipart);
 
             // Jotain määrityksiä...
