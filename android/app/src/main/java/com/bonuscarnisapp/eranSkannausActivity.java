@@ -81,6 +81,8 @@ public class eranSkannausActivity extends AppCompatActivity {
             kokopaino = kokopaino + Integer.parseInt(nextFourChars);
             TextView txtView2 = (TextView)findViewById(R.id.tvYhteenvetoSkannauksista);
             txtView2.setText("Tuotteita yht: " + skannattujenmaara + " - Tuotteitten paino: " + kokopaino + " grammaa");
+            buttonAloitaSkannaus.setVisibility(View.VISIBLE);
+            listaanappi.setVisibility(View.GONE);
         });
 
     }
@@ -167,6 +169,7 @@ public class eranSkannausActivity extends AppCompatActivity {
             TextView txtView = (TextView)findViewById(R.id.tvSkannattuTuote);
             splitString(result.getContents());
             txtView.setText("Tuotteen nimi: " + nextSixChars + " - Tuotteen paino: " + nextFourChars + " grammaa");
+            listaanappi.setVisibility(View.VISIBLE);
 
 
             // Lisätään OK button hälytysikkunaan ja asetetaan sille klikkaustapahtuman kuuntelija, joka sulkee ikkunan, kun sitä painetaan.
