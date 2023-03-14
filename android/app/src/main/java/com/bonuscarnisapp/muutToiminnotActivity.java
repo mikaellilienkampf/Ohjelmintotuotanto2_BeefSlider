@@ -1,7 +1,9 @@
 package com.bonuscarnisapp;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -15,14 +17,21 @@ import androidx.appcompat.app.AppCompatActivity;
 
 public class muutToiminnotActivity extends AppCompatActivity {
 
-
     private Button buttonLisaa;
-
-
+    private SharedPreferences sharedPref;
+    private boolean isDarkTheme;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        // Aseta teema
+        sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
+        isDarkTheme = sharedPref.getBoolean("darkTheme", false);
+        if (isDarkTheme) {
+            setTheme(R.style.DarkTheme);
+        } else {
+            setTheme(R.style.LightTheme);
+        }
         setContentView(R.layout.activity_muut_toiminnot);
         // Paluu-painike Actionbariin...
         ActionBar actionBar = getSupportActionBar();
