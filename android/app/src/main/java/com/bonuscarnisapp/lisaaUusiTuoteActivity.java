@@ -82,7 +82,6 @@ public class lisaaUusiTuoteActivity extends AppCompatActivity {
         tallenna.setOnClickListener(new View.OnClickListener() {
 
             @Override
-            //Tuote oliosta tehty editable Tuote.javaan...
             //metodi jolla luodaan tuote olio ja lisätään tiedot tuote listaan, kun tallenna nappia painetaan.
             public void onClick(View v) {
 
@@ -116,8 +115,7 @@ public class lisaaUusiTuoteActivity extends AppCompatActivity {
                 tuoteArrayList.add(tuote);
 
                 //Tiedosto kansio pitää olla luotu ensin eli nyt tiedosto puuttuu.
-                // Tallennetaan tiedot tiedostoon tuotteet.csv. HUOM. Tuote oliosta tehty editable Tuote.javaan.
-                //pitää muuttaa tyyppiä jos ei toimi String line = t.getId() + "," + t.getNimi() + "," + t.getHinta()
+                // Tallennetaan tiedot tiedostoon tuotteet.csv.
                 try {
                     FileOutputStream fos = openFileOutput("tuotteet.csv", Context.MODE_PRIVATE);
 
