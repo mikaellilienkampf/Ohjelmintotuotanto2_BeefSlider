@@ -8,7 +8,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.view.MenuItem;
@@ -37,6 +39,8 @@ public class lisaaUusiTuoteActivity extends AppCompatActivity {
     private EditText textAnnaEan;
     private EditText textAnnaTuoteNimi;
     private EditText textAnnaHinta;
+    private SharedPreferences sharedPref;
+    private boolean isDarkTheme;
 
     static ArrayList<Tuote> tuoteArrayList = new ArrayList<Tuote>();
 
@@ -44,6 +48,14 @@ public class lisaaUusiTuoteActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        // Aseta teema
+        sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
+        isDarkTheme = sharedPref.getBoolean("darkTheme", false);
+        if (isDarkTheme) {
+            setTheme(R.style.DarkTheme);
+        } else {
+            setTheme(R.style.LightTheme);
+        }
         setContentView(R.layout.activity_lisaa_uusi_tuote);
 
         /*

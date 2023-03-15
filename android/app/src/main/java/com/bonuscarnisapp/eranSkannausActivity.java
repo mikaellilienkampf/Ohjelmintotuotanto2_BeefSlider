@@ -5,6 +5,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -18,6 +19,10 @@ import android.widget.TextView;
 import com.journeyapps.barcodescanner.ScanContract;
 import com.journeyapps.barcodescanner.ScanOptions;
 
+import java.io.File;
+import java.io.FileWriter;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.UUID;
 
 public class eranSkannausActivity extends AppCompatActivity {
@@ -30,7 +35,10 @@ public class eranSkannausActivity extends AppCompatActivity {
     String lastChar;
     int skannattujenmaara;
     Button listaanappi;
+
+    Button kuittinappi;
     int kokopaino;
+    private static Context context;
 
     private SharedPreferences sharedPref;
     private boolean isDarkTheme;
@@ -81,8 +89,38 @@ public class eranSkannausActivity extends AppCompatActivity {
             kokopaino = kokopaino + Integer.parseInt(nextFourChars);
             TextView txtView2 = (TextView)findViewById(R.id.tvYhteenvetoSkannauksista);
             txtView2.setText("Tuotteita yht: " + skannattujenmaara + " - Tuotteitten paino: " + kokopaino + " grammaa");
+
+            TextView txtView = (TextView)findViewById(R.id.tvSkannaustila);
+            txtView.setText(txtView.getText() + "\n" + "Tuotteen nimi: " + nextSixChars + " - Tuotteen paino: " + nextFourChars + "grammaa");
+
             buttonAloitaSkannaus.setVisibility(View.VISIBLE);
             listaanappi.setVisibility(View.GONE);
+        });
+
+        kuittinappi =findViewById(R.id.btn_kuitti);
+        context = getApplicationContext();
+
+        kuittinappi.setOnClickListener(v->
+        {
+
+            File dir = new File(context.getFilesDir(), "Kuitit");
+            if(!dir.exists()){
+                dir.mkdir();
+            }
+
+            try {
+                TextView txtView = (TextView)findViewById(R.id.tvSkannaustila);
+                File gpxfile = new File(dir, aikaleima1() + ".csv");
+                FileWriter writer = new FileWriter(gpxfile);
+                writer.append(txtView.getText());
+                writer.flush();
+                writer.close();
+                System.out.println("Tiedosto löytyy täältä: " + gpxfile.getAbsolutePath());
+            } catch (Exception e){
+                e.printStackTrace();
+            }
+
+
         });
 
     }
@@ -193,6 +231,14 @@ public class eranSkannausActivity extends AppCompatActivity {
 
 
     }
+
+
+        public static String aikaleima1() {
+            LocalDateTime currentDateTime = LocalDateTime.now();
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyy-MM-dd-HH-mm-ss");
+            return currentDateTime.format(formatter);
+        }
+
 
     // tarkistaa että koodi on oikeanlainen
     public static boolean tarkistakoodi(String y) {
