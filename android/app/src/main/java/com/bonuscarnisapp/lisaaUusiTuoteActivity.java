@@ -17,9 +17,13 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Objects;
 
@@ -41,6 +45,11 @@ public class lisaaUusiTuoteActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_lisaa_uusi_tuote);
+
+        /*
+        //Lataa tiedostossa olevat tiedot käyttöön
+        lataaTiedot();
+         */
 
         // Paluu-painike Actionbariin
         ActionBar actionBar = getSupportActionBar();
@@ -88,7 +97,9 @@ public class lisaaUusiTuoteActivity extends AppCompatActivity {
 
 
                 //Luodaan uusi tuote olio, joka saa arvokseen ean, nimen ja hinnan.
-                Tuote tuote = new Tuote(textAnnaEan.getText(), textAnnaTuoteNimi.getText(), textAnnaHinta.getText());
+                Tuote tuote = new Tuote(Integer.parseInt(textAnnaEan.getText().toString()),
+                        textAnnaTuoteNimi.getText().toString(),
+                        Float.parseFloat(textAnnaHinta.getText().toString()));
                 //Lisätään listaan
                 tuoteArrayList.add(tuote);
 
@@ -129,10 +140,10 @@ public class lisaaUusiTuoteActivity extends AppCompatActivity {
 
                 //etsitään tuoteArrayListasta tuote, jolla on annettu EAN-koodi
                 for (Tuote t : tuoteArrayList) {
-                    if (Objects.equals(t.getId(), ean)) {
+                    if (t.getId() == Integer.parseInt(ean)) {
                         //jos tuote löytyy, täytetään sen tiedot tekstikenttiin
                         textAnnaTuoteNimi.setText(t.getNimi());
-                        textAnnaHinta.setText((int) t.getHinta());
+                        textAnnaHinta.setText(String.valueOf(t.getHinta()));
                         return;
                     }
                 }
@@ -151,7 +162,7 @@ public class lisaaUusiTuoteActivity extends AppCompatActivity {
 
                 //etsitään tuoteArrayLististasta tuotetta
                 for (Tuote t : tuoteArrayList) {
-                    if (Objects.equals(t.getId(), ean)) {
+                    if (t.getId() == Integer.parseInt(ean)) {
                         //kysytään käyttäjältä varmistus tuotteen poistamisesta
                         AlertDialog.Builder builder = new AlertDialog.Builder(lisaaUusiTuoteActivity.this);
                         builder.setMessage("Haluatko varmasti poistaa tuotteen?")
@@ -199,18 +210,25 @@ public class lisaaUusiTuoteActivity extends AppCompatActivity {
 
                 //etsitään tuoteArrayListasta tuote
                 for (Tuote t : tuoteArrayList) {
-                    if (Objects.equals(t.getId(), ean)) {
+                    if (t.getId() == Integer.parseInt(ean)) {
                         //päivitetään olion tiedot tekstikenttien mukaisesti
                         t.setNimi(textAnnaTuoteNimi.getText().toString());
                         t.setHinta(Float.parseFloat(textAnnaHinta.getText().toString()));
 
                         //tallennetaan päivitetty lista tiedostoon
                         tallennaTiedot();
-                    }
 
-                    //annetaan käyttäjälle ilmoitus päivityksen onnistumisesta
-                    Toast.makeText(getApplicationContext(), "Tiedot päivitetty", Toast.LENGTH_SHORT).show();
-                    return;
+                        //tyhjennetään EAN, nimi ja hinta -kentät
+                        textAnnaEan.setText("");
+                        textAnnaTuoteNimi.setText("");
+                        textAnnaHinta.setText("");
+
+
+
+                        //annetaan käyttäjälle ilmoitus päivityksen onnistumisesta
+                        Toast.makeText(getApplicationContext(), "Tiedot päivitetty", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
                 }
             }
 
@@ -250,6 +268,42 @@ public class lisaaUusiTuoteActivity extends AppCompatActivity {
             }
             return super.onOptionsItemSelected(item);
         }
+
+        //Ladataan tiedostossa olevat tiedot listaan jotta niitä voidaan käsitellä.
+        // Ei lataa vielä tiedostossa olevie tietoja koska ei löydä tiedostoa.
+     /*
+
+    private void lataaTiedot() {
+        try {
+            FileInputStream fis = openFileInput("tuotteet.csv");
+            InputStreamReader isr = new InputStreamReader(fis);
+            BufferedReader br = new BufferedReader(isr);
+
+            String line;
+            while ((line = br.readLine()) != null) {
+                String[] parts = line.split(",");
+
+                int id = Integer.parseInt(parts[0]);
+                String nimi = parts[1];
+                float hinta = Float.parseFloat(parts[2]);
+
+                Tuote tuote = new Tuote(id, nimi, hinta);
+                tuoteArrayList.add(tuote);
+            }
+
+            br.close();
+            isr.close();
+            fis.close();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+            Toast.makeText(getApplicationContext(), "Tiedostoa ei löytynyt", Toast.LENGTH_SHORT).show();
+        } catch (IOException e) {
+            e.printStackTrace();
+            Toast.makeText(getApplicationContext(), "Tiedoston lukeminen epäonnistui", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+     */
 
     }
 
