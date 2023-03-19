@@ -19,7 +19,9 @@
     <string name="hint_name">Kirjoita nimi...</string>                          <!-- "textAnnaNimi" -editTextin teksti -->
 
     <!-- activity_eran_skannaus.xml / eranSkannausActivityn sisältö -->
-    <string name="start_scanning">Aloita erän skannaus</string>                 <!-- "Aloita skannaus" -buttonin teksti -->
+    <string name="start_scanning">Aktivoi skanneri</string>                 <!-- "Aloita skannaus" -buttonin teksti -->
+    <string name="scanning_finished">Erä valmis</string>
+    <string name="send_email">Lähetä erä sähköpostiin</string>
     <string name="list_product">Listaa tuote</string>
     <string name="lisaa_uusi_tuote_jarjestelmaan">Lisää uusi tuote järjestelmään</string>
     <string name="anna_viivakoodi">Anna viivakoodi...</string>

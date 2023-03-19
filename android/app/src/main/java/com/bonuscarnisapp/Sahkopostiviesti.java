@@ -46,29 +46,32 @@ public class Sahkopostiviesti {
     private String viestinVastaanottaja;
     private String viestinAihe;
     private String viestinSisalto;
-    // private viestinLiite todo;
+
+    private String[] viestinLiitteet;
 
 
     // Parametriton konstruktori
     Sahkopostiviesti(){};
 
     // Parametrillinen konstruktori
-    public Sahkopostiviesti(Context context, String viestinAihe, String viestinSisalto){
+    public Sahkopostiviesti(Context context, String viestinAihe, String viestinSisalto, String[] viestinLiitteet){
         this.context = context;
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(context);
         // Kehitystyön ja testauksen ajan:
         this.viestinLahettaja = "r13testi@gmail.com";
         this.sahkopostinSalasana = "chnommsbfyhdfxpm";
         this.viestinVastaanottaja = sharedPref.getString("defaultEmail", null);
+
         // Lopullisessa versiossa:
         //this.viestinLahettaja = sharedPref.getString("defaultEmail", null); // Haetaan asetuksista
         //this.sahkopostinSalasana = sharedPref.getString("defaultEmailPassword", null); // Haetaan asetuksista
         //this.viestinVastaanottaja = this.viestinLahettaja; // Oletuksena lähetetään samaan osoitteeseen
-        // Viestin aihe, sisältö ja liitteet välitetään parametreina
+
+        // Viestin aihe, sisältö ja liitteet välitetään parametreina kun olio alustetaan
         this.viestinAihe = viestinAihe;
         this.viestinSisalto = viestinSisalto;
-        // Liitteet
-        //String[] viestinLiitteet = viestinLiitteet; // Ehkä jotenkin näin? Selviää, kun tietää mihin csv-tiedot tallennetaan...
+        this.viestinLiitteet = viestinLiitteet;
+
     }
 
     // Metodi, joka lähettää sähköpostiviestin
@@ -100,8 +103,28 @@ public class Sahkopostiviesti {
             BodyPart messageBodyPart = new MimeBodyPart();
             messageBodyPart.setText(this.viestinSisalto); // Body
 
-            // Määritetään viestin liitteet todo
+            // Liitetään varsinainen viestiosa ja liiteosa yhteen
+            // Määritetään, että viesti koostuu useista osista (viesti + liitteet)
+            Multipart multipart = new MimeMultipart();
+            multipart.addBodyPart(messageBodyPart); // Lisätään varsinainen viestiosa
+            // Luodaan viestiin liiteosat (tarvittaessa > 1)
+            for(int i = 0; i < this.viestinLiitteet.length; i++){
+                MimeBodyPart attachmentPart = new MimeBodyPart();
+                File csvLiitteenKansio = new File(this.context.getFilesDir(), "csv_tiedostot");
+                File liitetiedosto = new File(csvLiitteenKansio, this.viestinLiitteet[i]);
+                //File liitetiedosto = new File(this.context.getFilesDir(), this.viestinLiitteet[i]);
+                DataSource source = new FileDataSource(liitetiedosto);
+                attachmentPart.setDataHandler(new DataHandler(source));
+                attachmentPart.setFileName(this.viestinLiitteet[i]);
+                multipart.addBodyPart(attachmentPart); // Lisätään liiteosa muuhun viestiin
+            }
+            mimeMessage.setContent(multipart); // Kasataan varsinainen viesti
 
+
+
+
+
+            /*
             // Kehitysvaiheessa: Luodaan testitiedosto getFilesDir()-hakemistoon
             String filename = "testiliite.txt";
             String fileContents = "Tämä on testitiedosto sähköpostiviestin liitteeksi!";
@@ -111,7 +134,7 @@ public class Sahkopostiviesti {
                 throw new RuntimeException(e);
             } catch (IOException e) {
                 throw new RuntimeException(e);
-            }
+            }*/
 
             /*
             // Tällä voidaan listata Logcatiin getFilesDir()-kansiossa olevat tiedostot; helpottanee testausta
@@ -121,21 +144,25 @@ public class Sahkopostiviesti {
             for (int i = 0; i < files.length; i++)
             {
                 Log.d("Files", "FileName: " + files[i].getName());
-            }
-            */
 
-            // Luodaan viestiin liiteosa ja liitetään äsken luotu tiedosto siihen
-            MimeBodyPart attachmentPart = new MimeBodyPart();
-            File liitetiedosto = new File(this.context.getFilesDir(), filename);
-            DataSource source = new FileDataSource(liitetiedosto);
-            attachmentPart.setDataHandler(new DataHandler(source));
-            attachmentPart.setFileName(filename);
+                // Tällä poistettiin väärään paikkaan joutuneet csv-tiedostot
+                //if(files[i].getName().endsWith(".csv")){
+                //    files[i].delete();
+                //}
+            }*/
 
-            // Liitetään varsinainen viestiosa ja liiteosa yhteen
-            Multipart multipart = new MimeMultipart();
-            multipart.addBodyPart(messageBodyPart);
-            multipart.addBodyPart(attachmentPart);
-            mimeMessage.setContent(multipart);
+            /*
+            // Tällä voidaan listata Logcatiin getFilesDir()/csv_tiedostot-kansiossa olevat tiedostot; helpottanee testausta
+            File csvdirectory = new File(this.context.getFilesDir(), "csv_tiedostot");//.toString();
+            File[] csvfiles = csvdirectory.listFiles();
+            Log.d("csvFiles", "Size: "+ csvfiles.length);
+            for (int j = 0; j < csvfiles.length; j++)
+            {
+                Log.d("csvFiles", "FileName: " + csvfiles[j].getName());
+            }*/
+
+
+
 
             // Jotain määrityksiä...
             MailcapCommandMap mc = (MailcapCommandMap) CommandMap.getDefaultCommandMap();

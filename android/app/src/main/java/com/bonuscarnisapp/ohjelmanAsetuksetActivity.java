@@ -194,7 +194,8 @@ public class ohjelmanAsetuksetActivity extends AppCompatActivity implements View
             @Override
             public void onClick(View v) {
                 // Luodaan Sahkopostiviesti-olio (parametreina context, viestin aihe ja sisältö)
-                Sahkopostiviesti sahkopostiviesti = new Sahkopostiviesti(getApplicationContext(), "Testiviesti", "Tämä on sovelluksen lähettämä testiviesti.");
+                String[] viestinLiitteet = {};
+                Sahkopostiviesti sahkopostiviesti = new Sahkopostiviesti(getApplicationContext(), "Testiviesti", "Tämä on sovelluksen lähettämä testiviesti. Ei lähetä enää liitteitä.", viestinLiitteet);
                 // Lähetetään sähköpostiviesti (parametrina view)
                 sahkopostiviesti.lahetaSahkopostiviesti(v);
             }
