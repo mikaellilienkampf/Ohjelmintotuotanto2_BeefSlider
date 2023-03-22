@@ -18,7 +18,11 @@ import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -90,7 +94,23 @@ public class erienSelausActivity extends AppCompatActivity {
             }
         });
 
+        //Valittua erää kerran painamalla pääsee käsiksi erän sisältämään dataan.
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                File selectedFile = fileList.get(position);
+                //Kutsutaan metodia, jolla pääsee käsiksi dataan ja poistamaan sitä
+                viewAndEditCSVFile(selectedFile);
+            }
+        });
+
+
+/////////////////
+
+
     }
+
+   //////////////////
 
     //Metodi, jolla haetaan csv-tiedostot csv.tiedostot-kansiosta
     private File[] getCSVFiles() {
@@ -117,4 +137,66 @@ public class erienSelausActivity extends AppCompatActivity {
         }
         return super.onOptionsItemSelected(item);
     }
+
+    //Metodi joka listaa tiedoston datan näkyviin ja niitä voi poistaa.
+    private void viewAndEditCSVFile(File selectedFile) {
+        try {
+            BufferedReader reader = new BufferedReader(new FileReader(selectedFile));
+            String line;
+            List<String> lines = new ArrayList<>();
+
+            while ((line = reader.readLine()) != null) {
+                lines.add(line);
+            }
+            reader.close();
+
+
+            AlertDialog.Builder builder = new AlertDialog.Builder(erienSelausActivity.this);
+            builder.setTitle("Tiedoston sisältö");
+
+            ListView dataListView = new ListView(erienSelausActivity.this);
+            ArrayAdapter<String> dataAdapter = new ArrayAdapter<>(erienSelausActivity.this, android.R.layout.simple_list_item_1, lines);
+            dataListView.setAdapter(dataAdapter);
+            builder.setView(dataListView);
+
+            // Painamalla valittua dataa, sen voi poistaa
+            dataListView.setOnItemClickListener((parent, view, position, id) -> {
+
+                new AlertDialog.Builder(erienSelausActivity.this)
+                        .setTitle("Poista tieto")
+                        .setMessage("Haluatko varmasti poistaa tämän tiedon?")
+                        .setPositiveButton("Kyllä", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                lines.remove(position);
+                                dataAdapter.notifyDataSetChanged();
+                            }
+            })
+
+                        .setNegativeButton("Ei", null)
+                        .setIcon(R.drawable.ic_launcher_foreground)
+                        .show();
+            });
+
+            // Muutosten tallennus
+            builder.setPositiveButton("Tallenna", (dialog, which) -> {
+                try {
+                    FileWriter writer = new FileWriter(selectedFile, false);
+                    for (String rowData : lines) {
+                        writer.write(rowData + "\n");
+                    }
+                    writer.close();
+                } catch (IOException e) {
+                    Toast.makeText(erienSelausActivity.this, "Virhe tiedoston tallennuksessa", Toast.LENGTH_SHORT).show();
+                }
+            });
+
+            builder.setNegativeButton("Peruuta", null);
+            builder.show();
+        } catch (IOException e) {
+            Toast.makeText(erienSelausActivity.this, "Virhe tiedoston lukemisessa", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+
+
 }
