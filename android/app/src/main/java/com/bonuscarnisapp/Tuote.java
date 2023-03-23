@@ -55,7 +55,7 @@ public class Tuote {
      */
     @NonNull
     public String toString() {
-        return id + "," + nimi + "," + hinta;
+        return id + ";" + nimi + ";" + hinta;
     }
 
 }
