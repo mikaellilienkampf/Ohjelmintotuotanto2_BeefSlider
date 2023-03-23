@@ -15,13 +15,12 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.PopupMenu;
 
-public class MainActivity extends AppCompatActivity implements PopupMenu.OnMenuItemClickListener {
+public class MainActivity extends AppCompatActivity { //implements PopupMenu.OnMenuItemClickListener {
 
     // Alustetaan aloitusnäkymän painikkeet
     private Button buttonAloitaUudenEranSkannaus;
     private Button buttonSelaaJaMuokkaa;
     private Button buttonAvaaMuutToiminnot;
-    private ImageButton imageButtonAloitussivunValikko;
 
     private SharedPreferences sharedPref;
     private boolean isDarkTheme;
@@ -72,16 +71,6 @@ public class MainActivity extends AppCompatActivity implements PopupMenu.OnMenuI
                 avaaMuutToiminnotTila();
             }
         });
-
-        // AloitussivunValikko -painikkeen toiminnallisuus
-        imageButtonAloitussivunValikko = findViewById(R.id.ibAloitussivunValikko);
-        imageButtonAloitussivunValikko.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                avaaAloitussivunValikko(v);
-            }
-        });
-
     }
 
     /*
@@ -108,53 +97,10 @@ public class MainActivity extends AppCompatActivity implements PopupMenu.OnMenuI
         startActivity(intent);
     }
 
-    /*
-     Metodi, joka määrittää mitä tapahtuu, kun käyttäjä painaa ibAloitussivunValikko-painiketta
-     */
-    public void avaaAloitussivunValikko(View v){
-        PopupMenu popup = new PopupMenu(this, v);
-        popup.setOnMenuItemClickListener(MainActivity.this);
-        popup.inflate(R.menu.aloitussivunvalikko);
-        popup.show();
-    }
-
-    public boolean onMenuItemClick(MenuItem item) {
-        switch(item.getItemId()) {
-            case R.id.settings:
-                Intent intent = new Intent(this, ohjelmanAsetuksetActivity.class);
-                startActivity(intent);
-                return true;
-            case R.id.exit:
-
-                // Varmistetaan, että käyttäjä todella haluaa sulkea ohjelman
-                AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
-
-                builder.setTitle("Lopetetaanko ohjelma?");
-                builder.setMessage("Oletko varma, että haluat sulkea ohjelman?");
-                builder.setPositiveButton("Kyllä", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        // Sulje ohjelma
-                        finish();
-                        System.exit(0);
-                    }
-                });
-                builder.setNegativeButton("Peruuta", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        // Sulje ikkuna ja jatka normaalisti
-                        dialog.dismiss();
-                    }
-                });
-                AlertDialog alert = builder.create();
-                alert.show();
-                return true;
-            default:
-                return true;
-        }
-    }
-
     @Override
     public void onPointerCaptureChanged(boolean hasCapture) {
         super.onPointerCaptureChanged(hasCapture);
     }
+
+
 }

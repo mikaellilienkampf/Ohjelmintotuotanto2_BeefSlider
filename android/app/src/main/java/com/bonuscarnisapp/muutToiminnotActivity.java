@@ -18,6 +18,7 @@ import androidx.appcompat.app.AppCompatActivity;
 public class muutToiminnotActivity extends AppCompatActivity {
 
     private Button buttonLisaa;
+    private Button buttonAsetukset;
     private SharedPreferences sharedPref;
     private boolean isDarkTheme;
 
@@ -49,6 +50,15 @@ public class muutToiminnotActivity extends AppCompatActivity {
             }
         });
 
+        // Asetukset -painikkeen toiminnallisuus
+        buttonAsetukset = findViewById(R.id.btAsetukset);
+        buttonAsetukset.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                avaaAsetukset();
+            }
+        });
+
 
 
     }
@@ -77,6 +87,8 @@ public class muutToiminnotActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-
-
+    public void avaaAsetukset() {
+        Intent intent = new Intent(this, ohjelmanAsetuksetActivity.class);
+        startActivity(intent);
+    }
 }

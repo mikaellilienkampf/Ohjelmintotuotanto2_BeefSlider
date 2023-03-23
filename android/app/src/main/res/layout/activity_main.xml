@@ -57,15 +57,4 @@
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/bc_logo" />
 
-    <ImageButton
-        android:id="@+id/ibAloitussivunValikko"
-        style="?android:attr/actionOverflowButtonStyle"
-        android:layout_width="90dp"
-        android:layout_height="81dp"
-        android:contentDescription="@string/menu"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
 </androidx.constraintlayout.widget.ConstraintLayout>

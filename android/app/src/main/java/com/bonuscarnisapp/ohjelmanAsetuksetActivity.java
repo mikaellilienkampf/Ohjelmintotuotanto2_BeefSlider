@@ -204,15 +204,15 @@ public class ohjelmanAsetuksetActivity extends AppCompatActivity implements View
     }
 
     /*
-        Metodi, joka palauttaa ohjelman päävalikkoon, kun käyttäjä painaa ActionBarissa olevaa nuolta.
+        Metodi, joka palauttaa ohjelman Muut toiminnot -valikkoon, kun käyttäjä painaa ActionBarissa olevaa nuolta.
         Ei kysy käyttäjältä erillistä varmistusta.
          */
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
-                // Palaa alkuvalikkoon
-                Intent intent = new Intent(ohjelmanAsetuksetActivity.this, MainActivity.class);
+                // Palaa Muut toiminnot -valikkoon
+                Intent intent = new Intent(ohjelmanAsetuksetActivity.this, muutToiminnotActivity.class);
                 startActivity(intent);
         }
         return super.onOptionsItemSelected(item);

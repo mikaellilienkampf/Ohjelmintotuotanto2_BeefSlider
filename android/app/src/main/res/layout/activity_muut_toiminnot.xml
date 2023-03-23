@@ -18,4 +18,15 @@
         app:layout_constraintTop_toTopOf="parent"
         tools:ignore="TextSizeCheck" />
 
+    <Button
+        android:id="@+id/btAsetukset"
+        android:layout_width="277dp"
+        android:layout_height="72dp"
+        android:layout_marginTop="204dp"
+        android:text="@string/asetukset"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="TextSizeCheck" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
