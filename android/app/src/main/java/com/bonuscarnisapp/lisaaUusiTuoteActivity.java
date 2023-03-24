@@ -58,10 +58,24 @@ public class lisaaUusiTuoteActivity extends AppCompatActivity {
         }
         setContentView(R.layout.activity_lisaa_uusi_tuote);
 
-        /*
+
         //Lataa tiedostossa olevat tiedot käyttöön
+        try {
         lataaTiedot();
-         */
+        } catch (Exception e) {
+            String[] line = Tuote.alkuData().split("\n");
+
+            for (String l : line) {
+                String[] parts = l.split(";");
+                int id = Integer.parseInt(parts[0]);
+                String nimi = parts[1];
+                float hinta = Float.parseFloat(parts[2]);
+                Tuote tuote = new Tuote(id, nimi, hinta);
+                tuoteArrayList.add(tuote);
+            }
+            tallennaTiedot();
+        }
+
 
         // Paluu-painike Actionbariin
         ActionBar actionBar = getSupportActionBar();
@@ -114,13 +128,12 @@ public class lisaaUusiTuoteActivity extends AppCompatActivity {
                 //Lisätään listaan
                 tuoteArrayList.add(tuote);
 
-                //Tiedosto kansio pitää olla luotu ensin eli nyt tiedosto puuttuu.
                 // Tallennetaan tiedot tiedostoon tuotteet.csv.
                 try {
                     FileOutputStream fos = openFileOutput("tuotteet.csv", Context.MODE_PRIVATE);
 
                     for (Tuote t : tuoteArrayList) {
-                        String line = t.getId() + "," + t.getNimi() + "," + t.getHinta() + "\n";
+                        String line = t + "\n";
                         fos.write(line.getBytes());
                     }
                     fos.close();
@@ -185,7 +198,7 @@ public class lisaaUusiTuoteActivity extends AppCompatActivity {
                                         try {
                                             FileOutputStream fos = openFileOutput("tuotteet.csv", Context.MODE_PRIVATE);
                                             for (Tuote t : tuoteArrayList) {
-                                                String line = t.getId() + "," + t.getNimi() + "," + t.getHinta() + "\n";
+                                                String line = t + "\n";
                                                 fos.write(line.getBytes());
                                             }
                                             fos.close();
@@ -252,7 +265,7 @@ public class lisaaUusiTuoteActivity extends AppCompatActivity {
             FileOutputStream fos = openFileOutput("tuotteet.csv", Context.MODE_PRIVATE);
 
             for (Tuote t : tuoteArrayList) {
-                String line = t.getId() + "," + t.getNimi() + "," + t.getHinta() + "\n";
+                String line = t + "\n";
                 fos.write(line.getBytes());
             }
             fos.close();
@@ -281,7 +294,7 @@ public class lisaaUusiTuoteActivity extends AppCompatActivity {
 
         //Ladataan tiedostossa olevat tiedot listaan jotta niitä voidaan käsitellä.
         // Ei lataa vielä tiedostossa olevie tietoja koska ei löydä tiedostoa.
-     /*
+
 
     private void lataaTiedot() {
         try {
@@ -291,7 +304,7 @@ public class lisaaUusiTuoteActivity extends AppCompatActivity {
 
             String line;
             while ((line = br.readLine()) != null) {
-                String[] parts = line.split(",");
+                String[] parts = line.split(";");
 
                 int id = Integer.parseInt(parts[0]);
                 String nimi = parts[1];
@@ -307,13 +320,24 @@ public class lisaaUusiTuoteActivity extends AppCompatActivity {
         } catch (FileNotFoundException e) {
             e.printStackTrace();
             Toast.makeText(getApplicationContext(), "Tiedostoa ei löytynyt", Toast.LENGTH_SHORT).show();
+            String[] line = Tuote.alkuData().split("\n");
+
+            for (String l : line) {
+                String[] parts = l.split(";");
+                int id = Integer.parseInt(parts[0]);
+                String nimi = parts[1];
+                float hinta = Float.parseFloat(parts[2]);
+                Tuote tuote = new Tuote(id, nimi, hinta);
+                tuoteArrayList.add(tuote);
+            }
+            tallennaTiedot();
+
         } catch (IOException e) {
             e.printStackTrace();
             Toast.makeText(getApplicationContext(), "Tiedoston lukeminen epäonnistui", Toast.LENGTH_SHORT).show();
         }
     }
 
-     */
 
     }
 
