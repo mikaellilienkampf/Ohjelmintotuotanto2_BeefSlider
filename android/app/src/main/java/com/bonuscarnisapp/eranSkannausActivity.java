@@ -266,64 +266,15 @@ public class eranSkannausActivity extends AppCompatActivity {
         options.setOrientationLocked(true);
         options.setCaptureActivity(CaptureAct.class);
 
-        // Luodaan uusi launcher viivakoodinlukijalle ja käynnistetään se annetuilla asetuksilla.
-        barLauncher.launch(options);
-    }
-
-    ActivityResultLauncher<ScanOptions> barLauncher = registerForActivityResult(new ScanContract(), result->
-    {
-        if(result.getContents() != null)
-        {
+        try {
+            // Luodaan uusi launcher viivakoodinlukijalle ja käynnistetään se annetuilla asetuksilla.
+            barLauncher.launch(options);
+        } catch (Exception e) {
             // Luodaan uusi hälytysikkuna näyttämään viivakoodinlukijan tulos
             AlertDialog.Builder builder = new AlertDialog.Builder(eranSkannausActivity.this);
-            builder.setTitle("Skannattu tuote:");
-            // Pilkotaan skannattu merkkijono
-            splitString(result.getContents());
-            //String[] tuotteenTiedot = haeTuotteenTiedot(nextSixChars); // Tällä kunhan tuotteet.csv saatavilla
-            String tuotteenNimi = nextSixChars; // tuotteenTiedot[0];
-            Double tuotteenPainoGrammoina = Double.parseDouble(nextFourChars);
-            Double tuotteenArvoEuroissa = 2.55; // Double.parseDouble(tuotteenTiedot[1])*(tuotteenPainoGrammoina/1000)
-            builder.setMessage("Tuote: " + tuotteenNimi + "\nPaino: " + tuotteenPainoGrammoina + " g\nArvo: " + tuotteenArvoEuroissa + " €");
-
-            // Listaa tuote -painike, jolla skannattu tuote listataan. Ohjelma palaa skanneriin.
-            builder.setPositiveButton("Listaa tuote", new DialogInterface.OnClickListener()
-            {
-                @Override
-                public void onClick(DialogInterface dialog, int i)
-                {
-                    // Jos kyseessä oli erän ensimmäinen tuote, määritetään tiedostonimi annetun nimen ja aikaleiman perusteella
-                    if(skannattujenmaara == 0 && poistettujenMaara == 0){
-                        if (eranNimi.length() != 0) {
-                            tiedostonimi = eranNimi + "_" + aikaleima() + ".csv";
-                        } else {
-                            tiedostonimi = "nimeton_" + aikaleima() + ".csv";
-                        }
-
-                        buttonLahetaSahkopostiin.setEnabled(true); // Mahdollistetaan sähköpostin lähetys
-                        buttonEraValmis.setEnabled(true); // Mahdollistetaan erän valmistumisen merkkaaminen
-                    }
-
-                    // Lisätään luettu tuote listviewiin
-                    listatutTuotteet.add(nextSixChars + " - " + tuotteenNimi + " - " + tuotteenPainoGrammoina + " g");
-                    // Päivitetään listview
-                    arr.notifyDataSetChanged();
-                    // Muokataan yhteenvetoa
-                    skannattujenmaara = skannattujenmaara + 1;
-                    kokopaino = kokopaino + Integer.parseInt(nextFourChars);
-                    String paivitettyYhteenveto = "Skannattuja tuotteita " + skannattujenmaara + " kpl, yht. " + Double.toString(((double) kokopaino)/1000) + " kg";
-                    textvievYhteenvetoSkannauksista.setText(paivitettyYhteenveto);
-                    // Tallennetaan muutokset csv-tiedostoon; luo/kirjoittaa yli tiedoston tiedostonimen perusteella aina kun uusi tuote on skannattu ja listattu
-                    tallennaMuutoksetCsvTiedostoon(tiedostonimi);
-                    // Sulje kysely ja jatka normaalisti
-                    dialog.dismiss();
-                    // Aktivoidaan skanneri uudestaan
-                    scanCode();
-                    //barLauncher.launch(options); // <- Ilmeisesti turha kun toimii pois kommentoitunakin?
-                }
-            });
-
-            // Hylkää painike, jotta käyttäjä voi tarvittaessa peruuttaa vahinkoskannauksen
-            builder.setNeutralButton("Hylkää skannaus", new DialogInterface.OnClickListener() {
+            builder.setTitle("Virhe!");
+            builder.setMessage("Kokeile uudestaan!");
+            builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     // Sulje kysely ja jatka normaalisti
@@ -334,6 +285,107 @@ public class eranSkannausActivity extends AppCompatActivity {
             });
             AlertDialog alert = builder.create();
             alert.show();
+        }
+    }
+
+    ActivityResultLauncher<ScanOptions> barLauncher = registerForActivityResult(new ScanContract(), result->
+    {
+        if (result.getContents() != null) {
+            try{
+                // Luodaan uusi hälytysikkuna näyttämään viivakoodinlukijan tulos
+                AlertDialog.Builder builder = new AlertDialog.Builder(eranSkannausActivity.this);
+                builder.setTitle("Skannattu tuote:");
+                // Pilkotaan skannattu merkkijono
+                splitString(result.getContents());
+                //String[] tuotteenTiedot = haeTuotteenTiedot(nextSixChars); // Tällä kunhan tuotteet.csv saatavilla
+                String tuotteenNimi = nextSixChars; // tuotteenTiedot[0];
+                Double tuotteenPainoGrammoina = Double.parseDouble(nextFourChars);
+                Double tuotteenArvoEuroissa = 2.55; // Double.parseDouble(tuotteenTiedot[1])*(tuotteenPainoGrammoina/1000)
+                builder.setMessage("Tuote: " + tuotteenNimi + "\nPaino: " + tuotteenPainoGrammoina + " g\nArvo: " + tuotteenArvoEuroissa + " €");
+
+                // Listaa tuote -painike, jolla skannattu tuote listataan. Ohjelma palaa skanneriin.
+                builder.setPositiveButton("Listaa tuote", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int i) {
+                        try {
+                            // Jos kyseessä oli erän ensimmäinen tuote, määritetään tiedostonimi annetun nimen ja aikaleiman perusteella
+                            if (skannattujenmaara == 0 && poistettujenMaara == 0) {
+                                if (eranNimi.length() != 0) {
+                                    tiedostonimi = eranNimi + "_" + aikaleima() + ".csv";
+                                } else {
+                                    tiedostonimi = "nimeton_" + aikaleima() + ".csv";
+                                }
+                                buttonLahetaSahkopostiin.setEnabled(true); // Mahdollistetaan sähköpostin lähetys
+                                buttonEraValmis.setEnabled(true); // Mahdollistetaan erän valmistumisen merkkaaminen
+                            }
+
+                            // Lisätään luettu tuote listviewiin
+                            listatutTuotteet.add(nextSixChars + " - " + tuotteenNimi + " - " + tuotteenPainoGrammoina + " g");
+
+                            // Päivitetään listview
+                            arr.notifyDataSetChanged();
+                            // Muokataan yhteenvetoa
+                            skannattujenmaara = skannattujenmaara + 1;
+                            kokopaino = kokopaino + Integer.parseInt(nextFourChars);
+                            String paivitettyYhteenveto = "Skannattuja tuotteita " + skannattujenmaara + " kpl, yht. " + Double.toString(((double) kokopaino) / 1000) + " kg";
+                            textvievYhteenvetoSkannauksista.setText(paivitettyYhteenveto);
+                            // Tallennetaan muutokset csv-tiedostoon; luo/kirjoittaa yli tiedoston tiedostonimen perusteella aina kun uusi tuote on skannattu ja listattu
+                            tallennaMuutoksetCsvTiedostoon(tiedostonimi);
+                            // Sulje kysely ja jatka normaalisti
+                            dialog.dismiss();
+                            // Aktivoidaan skanneri uudestaan
+                            scanCode();
+                            //barLauncher.launch(options); // <- Ilmeisesti turha kun toimii pois kommentoitunakin?
+                        } catch (Exception e){
+                            // Luodaan uusi hälytysikkuna näyttämään viivakoodinlukijan tulos
+                            AlertDialog.Builder builder = new AlertDialog.Builder(eranSkannausActivity.this);
+                            builder.setTitle("Virhe!");
+                            builder.setMessage("Skannatessa tapahtui odottamaton virhe (1). Kokeile uudestaan!");
+                            builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    // Sulje kysely ja jatka normaalisti
+                                    dialog.dismiss();
+                                    // Aktivoidaan skanneri uudestaan
+                                    scanCode();
+                                }
+                            });
+                            AlertDialog alert = builder.create();
+                            alert.show();
+                        }
+                    }
+                });
+
+                // Hylkää painike, jotta käyttäjä voi tarvittaessa peruuttaa vahinkoskannauksen
+                builder.setNeutralButton("Hylkää skannaus", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        // Sulje kysely ja jatka normaalisti
+                        dialog.dismiss();
+                        // Aktivoidaan skanneri uudestaan
+                        scanCode();
+                    }
+                });
+                AlertDialog alert = builder.create();
+                alert.show();
+            // Jos skannatessa tulee joku virhe:
+            } catch(RuntimeException e){
+                // Luodaan uusi hälytysikkuna
+                AlertDialog.Builder builder = new AlertDialog.Builder(eranSkannausActivity.this);
+                builder.setTitle("Virhe!");
+                builder.setMessage("Skannauksessa tapahtui odottamaton virhe. Kokeile uudestaan!");
+                builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        // Sulje kysely ja jatka normaalisti
+                        dialog.dismiss();
+                        // Aktivoidaan skanneri uudestaan
+                        scanCode();
+                    }
+                });
+                AlertDialog alert = builder.create();
+                alert.show();
+            }
         }
     });
 
@@ -373,7 +425,21 @@ public class eranSkannausActivity extends AppCompatActivity {
             outputStream.write(tiedostonSisalto.getBytes());
             outputStream.close();
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            // Luodaan uusi hälytysikkuna
+            AlertDialog.Builder builder = new AlertDialog.Builder(eranSkannausActivity.this);
+            builder.setTitle("Virhe!");
+            builder.setMessage("CSV-tiedoston tallentaminen epäonnistui. Kokeile uudestaan.");
+            builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    // Sulje kysely ja jatka normaalisti
+                    dialog.dismiss();
+                    // Aktivoidaan skanneri uudestaan
+                    scanCode();
+                }
+            });
+            AlertDialog alert = builder.create();
+            alert.show();
         }
     }
 

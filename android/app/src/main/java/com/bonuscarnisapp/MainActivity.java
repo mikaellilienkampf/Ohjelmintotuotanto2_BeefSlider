@@ -15,7 +15,7 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.PopupMenu;
 
-public class MainActivity extends AppCompatActivity { //implements PopupMenu.OnMenuItemClickListener {
+public class MainActivity extends AppCompatActivity {
 
     // Alustetaan aloitusnäkymän painikkeet
     private Button buttonAloitaUudenEranSkannaus;
