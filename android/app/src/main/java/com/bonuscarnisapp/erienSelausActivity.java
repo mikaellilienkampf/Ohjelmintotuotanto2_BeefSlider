@@ -63,7 +63,8 @@ public class erienSelausActivity extends AppCompatActivity {
         List<File> fileList = new ArrayList<>(Arrays.asList(csvFiles));
 
         //Määritetään ArrayAdapter näyttämään tiedostoluettelo ListView näkymässä
-        ArrayAdapter<File> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, csvFiles);
+        ArrayAdapter<File> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, fileList);
+
         listView.setAdapter(adapter);
 
         //Kun ListView näkymässä olevaa kohdetta painaa pitkään, voi poistaa ko. tiedoston.
@@ -196,7 +197,5 @@ public class erienSelausActivity extends AppCompatActivity {
             Toast.makeText(erienSelausActivity.this, "Virhe tiedoston lukemisessa", Toast.LENGTH_SHORT).show();
         }
     }
-
-
 
 }
