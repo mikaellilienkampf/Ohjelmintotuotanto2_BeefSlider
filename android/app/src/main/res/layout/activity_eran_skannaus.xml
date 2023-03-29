@@ -47,7 +47,7 @@
         android:layout_width="294dp"
         android:layout_height="25dp"
         android:layout_marginTop="16dp"
-        android:text="Skannattuja tuotteita 0 kpl, yht. 0,000 kg"
+        android:text="Skannattuja tuotteita 0 kpl, yht. 0,000 kg, 0,00 €"
         android:textAlignment="center"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.495"
