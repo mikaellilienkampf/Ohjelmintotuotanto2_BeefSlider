@@ -51,4 +51,7 @@
     <string name="ean">EAN</string>
     <string name="tuotelistan_muokkaus">Tuotelistan muokkaus</string>
     <string name="asetukset">Asetukset</string>
+
+    <string name="aiempiaEria">Skannattuja eriä tallennettuna: 0 kpl</string> <!-- Erien selaustilan yläosassa näkyvä yhteenveto -->
+
 </resources>

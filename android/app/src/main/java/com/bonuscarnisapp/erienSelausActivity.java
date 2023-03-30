@@ -16,6 +16,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.BufferedReader;
@@ -32,6 +33,8 @@ public class erienSelausActivity extends AppCompatActivity {
     private boolean isDarkTheme;
 
     private ListView listView;
+
+    private TextView textviewAiempiaEria;
 
     private File[] csvFiles;
 
@@ -59,8 +62,13 @@ public class erienSelausActivity extends AppCompatActivity {
         listView = findViewById(R.id.listView);
         csvFiles = getCSVFiles();
 
+
         //Muunnetaan csv tiedoston tiedot listaksi
         List<File> fileList = new ArrayList<>(Arrays.asList(csvFiles));
+
+        // Päivitetään textviewAiempiaEria
+        textviewAiempiaEria = findViewById(R.id.tvAiempiaEria);
+        textviewAiempiaEria.setText("Skannattuja eriä tallennettuna: " + fileList.size() + " kpl");
 
         //Määritetään ArrayAdapter näyttämään tiedostoluettelo ListView näkymässä
         ArrayAdapter<File> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, fileList);
@@ -81,6 +89,7 @@ public class erienSelausActivity extends AppCompatActivity {
                                 if (fileToDelete.delete()) {
                                     fileList.remove(position);
                                     adapter.notifyDataSetChanged();
+                                    textviewAiempiaEria.setText("Skannattuja eriä tallennettuna: " + fileList.size() + " kpl"); // Päivitetään textviewAiempiaEria
                                     Toast.makeText(erienSelausActivity.this, "Tiedosto poistettu", Toast.LENGTH_SHORT).show();
                                 } else {
                                     Toast.makeText(erienSelausActivity.this, "VIRHE! tiedostoa ei voitu poistaa", Toast.LENGTH_SHORT).show();
@@ -192,6 +201,41 @@ public class erienSelausActivity extends AppCompatActivity {
             });
 
             builder.setNegativeButton("Peruuta", null);
+
+            // Mahdollistetaan sähköpostin lähetys
+            builder.setNeutralButton("Lähetä sähköpostiin", (dialog, which) -> {
+                // Luodaan uusi alert dialog
+                AlertDialog.Builder builder2 = new AlertDialog.Builder(erienSelausActivity.this);
+                builder2.setTitle("Varmista CSV:n lähetys");
+                builder2.setMessage("Lähetetäänkö erän tiedot CSV-muodossa osoitteeseen " + sharedPref.getString("defaultEmail", null) + "?");
+
+                // Lisätään painikkeet
+                builder2.setPositiveButton("Lähetä", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        String tiedostonimi = selectedFile.getName(); // Muodostetaan tiedostonimi polun avulla
+                        // Lähetetään sähköpostiin halutut tiedostot
+                        String[] liitetiedostot = {tiedostonimi};
+                        // Muodostetaan viestin aihe
+                        String viestinAihe = "Joku hieno nimi: Erän " + tiedostonimi + " tiedot";
+                        String viestinSisalto = "Tämä on sovelluksen lähettämä viesti.\n\nHalutun erän skannaustiedot löytyvät liitteenä olevasta '" + tiedostonimi + "' tiedostosta.";
+
+                        // Luodaan Sahkopostiviesti-olio (parametreina context, viestin aihe ja sisältö)
+                        Sahkopostiviesti sahkopostiviesti = new Sahkopostiviesti(getApplicationContext(), viestinAihe, viestinSisalto, liitetiedostot);
+                        // Lähetetään sähköpostiviesti (parametrina view ja liitetiedosto)
+                        sahkopostiviesti.lahetaSahkopostiviesti(findViewById(android.R.id.content));
+                    }
+                });
+                // Peruuta sähköpostin lähetys
+                builder2.setNegativeButton("Peruuta", null);
+                // Dialogi näkyviin
+                AlertDialog dialog2 = builder2.create();
+                dialog2.show();
+            });
+
+
+
+            // Ikkuna näkyviin
             builder.show();
         } catch (IOException e) {
             Toast.makeText(erienSelausActivity.this, "Virhe tiedoston lukemisessa", Toast.LENGTH_SHORT).show();

@@ -202,9 +202,9 @@ public class eranSkannausActivity extends AppCompatActivity {
                 // Muodostetaan viestin aihe
                 String viestinAihe;
                 if (eranNimi.length() != 0) {
-                    viestinAihe = "Lihalinko: Erän " + eranNimi + " tiedot";
+                    viestinAihe = "Joku hieno nimi: Erän " + eranNimi + " tiedot";
                 } else {
-                    viestinAihe = "Lihalinko: Nimettömän erän tiedot";
+                    viestinAihe = "Joku hieno nimi: Nimettömän erän tiedot";
                 }
                 String viestinSisalto = "Tämä on sovelluksen lähettämä viesti.\n\nHalutun erän skannaustiedot löytyvät liitteenä olevasta '" + tiedostonimi + "' tiedostosta.";
 
