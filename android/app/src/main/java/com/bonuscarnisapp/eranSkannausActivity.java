@@ -272,7 +272,7 @@ public class eranSkannausActivity extends AppCompatActivity {
     ActivityResultLauncher<ScanOptions> barLauncher = registerForActivityResult(new ScanContract(), result->
     {
         if (result.getContents() != null) {
-            // Tarkistetaan, että viivakoodi on oikeanlainen (esim. alkaa merkeillä "28")
+            // Tarkistetaan, että viivakoodi on oikeanlainen (esim. alkaa merkeillä "23")
             if (tarkistaViivakoodi(result.getContents())) {
                 try {
                     // Pilkotaan skannattu merkkijono
@@ -396,12 +396,12 @@ public class eranSkannausActivity extends AppCompatActivity {
                     AlertDialog alert = builder.create();
                     alert.show();
                 }
-            // Jos viivakoodi ei ollut kelvollinen (esim. alkoi muilla merkeillä kuin "28")
+            // Jos viivakoodi ei ollut kelvollinen (esim. alkoi muilla merkeillä kuin "23")
             } else {
                 // Luodaan uusi hälytysikkuna
                 AlertDialog.Builder builder = new AlertDialog.Builder(eranSkannausActivity.this);
                 builder.setTitle("Viivakoodia ei tunnistettu");
-                builder.setMessage("Viivakoodi oli virheellinen tai se ei ala vaaditulla merkkijonolla (28).");
+                builder.setMessage("Viivakoodi oli virheellinen tai se ei ala vaaditulla merkkijonolla (23).");
                 builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
@@ -500,9 +500,9 @@ public class eranSkannausActivity extends AppCompatActivity {
             }
         }
 
-        // tarkista, että kahdella ensimmäisellä merkillä on arvot "2" ja "8"
-        if (y.charAt(0) != '2' || y.charAt(1) != '8') {
-            return false; // kahdella ensimmäisellä merkillä ei ole arvoja "2" ja "8"
+        // tarkista, että kahdella ensimmäisellä merkillä on arvot "2" ja "3"
+        if (y.charAt(0) != '2' || y.charAt(1) != '3') {
+            return false; // kahdella ensimmäisellä merkillä ei ole arvoja "2" ja "3"
         }
 
         return true; // y on kelvollinen
