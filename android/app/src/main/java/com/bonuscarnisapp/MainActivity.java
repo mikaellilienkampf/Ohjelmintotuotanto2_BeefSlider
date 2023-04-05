@@ -2,6 +2,8 @@ package com.bonuscarnisapp;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.view.GestureDetectorCompat;
+
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -9,7 +11,9 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.preference.PreferenceManager;
+import android.view.GestureDetector;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
@@ -26,10 +30,10 @@ public class MainActivity extends AppCompatActivity {
     private boolean isDarkTheme;
 
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
 
         // Aseta teema
         sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
@@ -40,6 +44,7 @@ public class MainActivity extends AppCompatActivity {
             setTheme(R.style.LightTheme);
         }
         setContentView(R.layout.activity_main);
+
 
         // ActionBarin otsikon päivitys
         ActionBar actionBar = getSupportActionBar();
@@ -72,6 +77,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
+
 
     /*
      Metodi, joka määrittää mitä tapahtuu, kun käyttäjä painaa btAloitaUudenEranSkannaus-painiketta
