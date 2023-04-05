@@ -1,15 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".MainActivity">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+
+    <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
+        android:layout_height="match_parent"
+        tools:context=".MainActivity">
 
 
     <Button
@@ -17,7 +14,7 @@
         android:layout_width="320dp"
         android:layout_height="70dp"
         android:layout_marginStart="70dp"
-        android:layout_marginTop="404dp"
+        android:layout_marginTop="308dp"
         android:layout_marginEnd="70dp"
         android:text="@string/start_new"
         app:layout_constraintEnd_toEndOf="parent"
@@ -30,7 +27,7 @@
         android:layout_width="320dp"
         android:layout_height="70dp"
         android:layout_marginStart="70dp"
-        android:layout_marginTop="500dp"
+        android:layout_marginTop="376dp"
         android:layout_marginEnd="70dp"
         android:text="@string/browse_and_edit"
         android:textSize="15dp"
@@ -44,7 +41,7 @@
         android:layout_width="320dp"
         android:layout_height="70dp"
         android:layout_marginStart="70dp"
-        android:layout_marginTop="596dp"
+        android:layout_marginTop="444dp"
         android:layout_marginEnd="70dp"
         android:text="@string/other_activities"
         android:textSize="15dp"
@@ -54,14 +51,15 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
-        android:id="@+id/ivAloitussivunLogo"
-        android:layout_width="320dp"
-        android:layout_height="415dp"
-        android:contentDescription="@string/logo"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/bc_logo" />
+            android:id="@+id/ivAloitussivunLogo"
+            android:layout_width="280dp"
+            android:layout_height="280dp"
+            android:layout_marginTop="16dp"
+            android:contentDescription="@string/logo"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.495"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/bc_logo_2" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
-</androidx.core.widget.NestedScrollView>
