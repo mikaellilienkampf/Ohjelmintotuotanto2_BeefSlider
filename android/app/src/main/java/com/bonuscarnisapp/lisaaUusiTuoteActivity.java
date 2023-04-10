@@ -118,7 +118,16 @@ public class lisaaUusiTuoteActivity extends AppCompatActivity {
                     return;
                 }
 
-                //TÄHÄN VARMENNUS JOKA TARKISTAA LÖYTYYKÖ EAN KOODI JO TIEDOSTOSTA...
+                //Tarkastetaan, ettei tuotenumeroa jo löydy
+                String ean = textAnnaEan.getText().toString();
+
+                //etsitään tuoteArrayListasta tuote
+                for (Tuote t : tuoteArrayList) {
+                    if (t.getId() == Integer.parseInt(ean)) {
+                        Toast.makeText(getApplicationContext(), "Tuote olemassa, käytä päivitä-painiketta.", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+                }
 
                 //Commandotisteri
                 String coomadot = String.valueOf(textAnnaHinta.getText());
