@@ -120,6 +120,10 @@ public class lisaaUusiTuoteActivity extends AppCompatActivity {
 
                 //TÄHÄN VARMENNUS JOKA TARKISTAA LÖYTYYKÖ EAN KOODI JO TIEDOSTOSTA...
 
+                //Commandotisteri
+                String coomadot = String.valueOf(textAnnaHinta.getText());
+                coomadot = coomadot.replace(",", ".");
+                textAnnaHinta.setText(String.valueOf(coomadot));
 
                 //Luodaan uusi tuote olio, joka saa arvokseen ean, nimen ja hinnan.
                 Tuote tuote = new Tuote(Integer.parseInt(textAnnaEan.getText().toString()),
@@ -228,6 +232,11 @@ public class lisaaUusiTuoteActivity extends AppCompatActivity {
         bt_paivita.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                //Commandotisteri
+                String coomadot = String.valueOf(textAnnaHinta.getText());
+                coomadot = coomadot.replace(",", ".");
+                textAnnaHinta.setText(String.valueOf(coomadot));
+
                 //haetaan syötetty EAN-koodi
                 String ean = textAnnaEan.getText().toString();
 
