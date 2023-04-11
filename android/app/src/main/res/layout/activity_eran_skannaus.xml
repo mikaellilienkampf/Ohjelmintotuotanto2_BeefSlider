@@ -10,21 +10,9 @@
     <Button
         android:id="@+id/btAktivoiSkanneri"
         android:layout_width="320dp"
-        android:layout_height="70dp"
-        android:layout_marginTop="520dp"
+        android:layout_height="60dp"
+        android:layout_marginTop="52dp"
         android:text="@string/start_scanning"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.494"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <Button
-        android:id="@+id/btLahetaSahkopostiin"
-        android:layout_width="320dp"
-        android:layout_height="70dp"
-        android:layout_marginTop="590dp"
-        android:enabled="false"
-        android:text="@string/send_email"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.494"
         app:layout_constraintStart_toStartOf="parent"
@@ -33,10 +21,22 @@
     <Button
         android:id="@+id/btValmis"
         android:layout_width="320dp"
-        android:layout_height="70dp"
-        android:layout_marginTop="660dp"
+        android:layout_height="60dp"
+        android:layout_marginTop="180dp"
         android:enabled="false"
         android:text="@string/scanning_finished"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.494"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/btLahetaSahkopostiin"
+        android:layout_width="320dp"
+        android:layout_height="60dp"
+        android:layout_marginTop="112dp"
+        android:enabled="false"
+        android:text="@string/send_email"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.494"
         app:layout_constraintStart_toStartOf="parent"
@@ -52,18 +52,17 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.495"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-/>
+        app:layout_constraintTop_toTopOf="parent" />
 
     <ListView
         android:id="@+id/lvListatutTuotteet"
-        android:layout_width="366dp"
-        android:layout_height="452dp"
-        android:layout_marginTop="50dp"
+        android:layout_width="320dp"
+        android:layout_height="360dp"
+        android:layout_marginTop="248dp"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.494"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-/>
+        app:layout_constraintTop_toTopOf="parent" />
 
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
