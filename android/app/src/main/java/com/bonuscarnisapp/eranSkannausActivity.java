@@ -200,18 +200,6 @@ public class eranSkannausActivity extends AppCompatActivity {
             } else {
                 listatutTuotteet = new ArrayList<String>();
             }
-            //for(int i=0; i<listatutTuotteet.size(); i++){
-            //    System.out.println("PERSE: " + listatutTuotteet.get(i));
-            //}
-            //arr.notifyDataSetChanged();
-            // Iteroidaan hashmapin keyt läpi ja päivitetään listatutTuotteet
-            //for (HashMap.Entry<String, ArrayList<String>> entry : skannatutTuotteet.entrySet()) {
-            //    paivitaTuoteryhmanYhteenveto(entry.getKey());
-            //    // Päivitetään adapteri
-            //    arr.notifyDataSetChanged();
-            //}
-
-
         }
         // Luodaan arrayAdapter listviewille
         listviewListatutTuotteet = findViewById(R.id.lvListatutTuotteet);
@@ -224,9 +212,6 @@ public class eranSkannausActivity extends AppCompatActivity {
         listviewListatutTuotteet.setChoiceMode(listviewListatutTuotteet.CHOICE_MODE_SINGLE); // Voi valita monta itemiä
         listviewListatutTuotteet.setTranscriptMode(listviewListatutTuotteet.TRANSCRIPT_MODE_ALWAYS_SCROLL); // Scrollaa automaattisesti alas, jos tuotteita tulee paljon
 
-
-        //arr.notifyDataSetChanged(); // Päivitetään siltä varalta, että kyseessä on jatkettava erä
-
         // Valittua tuoteryhmää kerran painamalla pääsee käsiksi erän sisältämään dataan.
         listviewListatutTuotteet.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -237,13 +222,6 @@ public class eranSkannausActivity extends AppCompatActivity {
                 katseleTuoteryhmanSkannauksia(valitunTuoteryhmanTuotekoodi.substring(0,6));
             }
         });
-
-
-
-
-
-
-
     }
 
     /*
@@ -341,13 +319,6 @@ public class eranSkannausActivity extends AppCompatActivity {
         return aiemmatSkannaukset;
     }
 
-
-
-
-
-
-
-
     /*
     Metodi, joka poistaa halatun tuoteryhmän listviewista
     */
@@ -366,7 +337,6 @@ public class eranSkannausActivity extends AppCompatActivity {
             listatutTuotteet.remove(poistettavanIndeksi);
             arr.notifyDataSetChanged();
     }
-
 
     /*
     Metodi, joka avaa ja listaa halutun tuoteryhmän skannaukset
@@ -720,13 +690,6 @@ public class eranSkannausActivity extends AppCompatActivity {
         }
     });
 
-
-
-
-
-
-
-
     /*
     Metodi, joka päivittää listViewissä näkyvän tuoteryhmän yhteenvedon. Palauttaa merkkijonon.
      */
@@ -761,20 +724,6 @@ public class eranSkannausActivity extends AppCompatActivity {
 
 
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
     /*
     Metodi, joka tallentaa muutokset csv-tiedostoon. Käytännössä ylikirjoittaa edellisen samannimisen tiedoston.
@@ -851,14 +800,11 @@ public class eranSkannausActivity extends AppCompatActivity {
         //lastChar = x.substring(12, 13);
     }
 
-
     public static String aikaleima() {
         LocalDateTime currentDateTime = LocalDateTime.now();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy_HH.mm:ss");
         return currentDateTime.format(formatter);
     }
-
-
 
     public static boolean tarkistaViivakoodi(String y) {
         if (y == null || y.length() != 13) {
@@ -879,11 +825,6 @@ public class eranSkannausActivity extends AppCompatActivity {
 
         return true; // y on kelvollinen
     }
-
-
-
-
-
 
     /*
     Metodi, joka palauttaa ohjelman päävalikkoon, kun käyttäjä painaa ActionBarissa olevaa nuolta.
@@ -971,7 +912,6 @@ public class eranSkannausActivity extends AppCompatActivity {
         return alert;
     }
 }
-
 
     /*
     Metodi, joka määrittää mitä tapahtuu, kun käyttäjä klikkaa btLuoKuitti-painiketta
