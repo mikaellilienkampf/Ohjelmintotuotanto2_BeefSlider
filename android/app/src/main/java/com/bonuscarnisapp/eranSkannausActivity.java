@@ -232,7 +232,7 @@ public class eranSkannausActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 String valitunTuoteryhmanTuotekoodi = (String) listviewListatutTuotteet.getItemAtPosition( position );
-                System.out.println("Valittu tuote: " + valitunTuoteryhmanTuotekoodi);
+                //System.out.println("Valittu tuote: " + valitunTuoteryhmanTuotekoodi);
                 //Kutsutaan metodia, jolla pääsee käsiksi dataan ja poistamaan sitä. Parametrina kuusinumeroinen tuotekoodi
                 katseleTuoteryhmanSkannauksia(valitunTuoteryhmanTuotekoodi.substring(0,6));
             }
@@ -272,10 +272,10 @@ public class eranSkannausActivity extends AppCompatActivity {
                 tuotteidenYhteisarvo = tuotteidenYhteisarvo + Double.parseDouble(tuotteenTiedotTaulukossa[3].substring(0, tuotteenTiedotTaulukossa[3].length() - 2).replace(",", "."));
             }
             String uusiTuotteenYhteenveto = entry.getKey() + " - " + tuotenimi + " (" + tuotteidenMaara + " kpl) - " + tuotteidenYhteispaino + " g - " + dfEuro.format(tuotteidenYhteisarvo) + " €";
-            System.out.println("aiemmin skannatun yht: " + uusiTuotteenYhteenveto);
+            //System.out.println("aiemmin skannatun yht: " + uusiTuotteenYhteenveto);
             palautettavaArray.add(uusiTuotteenYhteenveto);
         }
-        System.out.println("KOKO ON: " + palautettavaArray.size());
+        //System.out.println("KOKO ON: " + palautettavaArray.size());
         return palautettavaArray;
     }
 
@@ -372,7 +372,7 @@ public class eranSkannausActivity extends AppCompatActivity {
     Metodi, joka avaa ja listaa halutun tuoteryhmän skannaukset
      */
     public void katseleTuoteryhmanSkannauksia(String tuotekoodi){
-        System.out.println("Kutsuttiin tuotekoodilla: " + tuotekoodi);
+        //System.out.println("Kutsuttiin tuotekoodilla: " + tuotekoodi);
         // Haetaan ko. tuotteen skannaukset HashMapista
         ArrayList<String> tuoteryhmanSkannaukset = skannatutTuotteet.get(tuotekoodi);
 
@@ -406,7 +406,7 @@ public class eranSkannausActivity extends AppCompatActivity {
                         //System.out.println("Tuotteita: " + tuoteryhmanSkannaukset.size() + " kpl");
                         // Jos määrä meni nollaan
                         if(tuoteryhmanSkannaukset.size() == 0) {
-                            System.out.println("Meni nollaan");
+                            //.out.println("Meni nollaan");
                             alertbuilder.setTitle("Tuoteryhmässä ei enempää skannattuja tuotteita!"); // Muutetaan messagea
                             // Poistetaan tuoteryhmä kokonaan listviewistä
                             poistaTuoteryhmaListviewista(tuotekoodi);
@@ -582,7 +582,7 @@ public class eranSkannausActivity extends AppCompatActivity {
 
                                     // Testataan onko tuotetta jo skannattuna HashMapissa; Jos on:
                                     if(skannatutTuotteet.containsKey(nextSixChars)){
-                                        System.out.println("JOOJOO");
+                                        //System.out.println("JOOJOO");
                                         // Haetaan ko. tuotteen ArrayList
                                         ArrayList<String> tuotteenSkannaukset =  skannatutTuotteet.get(nextSixChars);
                                         // Alla oleva if tarpeellinen, jotta listaa tuoteryhmän sen jälkeen jos on kertaalleen kaikki tuotteet poistettu
@@ -601,7 +601,7 @@ public class eranSkannausActivity extends AppCompatActivity {
 
                                     // Jos ei ole:
                                     } else {
-                                        System.out.println("JEEJEE");
+                                        //System.out.println("JEEJEE");
                                         // Alustetaan merkkijono ArrayList
                                         ArrayList<String> tuotteenSkannaukset2 = new ArrayList<String>();
                                         // Lisätään arraylistiin juuri skannattu tuote merkkijonona
