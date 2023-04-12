@@ -202,12 +202,12 @@ public class erienSelausActivity extends AppCompatActivity {
 
             builder.setNegativeButton("Peruuta", null);
 
-            // Mahdollistetaan sähköpostin lähetys
-            builder.setNeutralButton("Lähetä sähköpostiin", (dialog, which) -> {
+            // Mahdollistetaan muut toiminnot
+            builder.setNeutralButton("Muut toiminnot", (dialog, which) -> {
                 // Luodaan uusi alert dialog
                 AlertDialog.Builder builder2 = new AlertDialog.Builder(erienSelausActivity.this);
-                builder2.setTitle("Varmista CSV:n lähetys");
-                builder2.setMessage("Lähetetäänkö erän tiedot CSV-muodossa osoitteeseen " + sharedPref.getString("defaultEmail", null) + "?");
+                builder2.setTitle("Muut vaihtoehdot");
+                builder2.setMessage("Jatketaanko erän skannausta tai lähetetäänkö erän tiedot CSV-muodossa osoitteeseen " + sharedPref.getString("defaultEmail", null) + "?");
 
                 // Lisätään painikkeet
                 builder2.setPositiveButton("Lähetä", new DialogInterface.OnClickListener() {
@@ -226,8 +226,21 @@ public class erienSelausActivity extends AppCompatActivity {
                         sahkopostiviesti.lahetaSahkopostiviesti(findViewById(android.R.id.content));
                     }
                 });
+                // Negative-buttoniin erän jatkaminen
+                builder2.setNegativeButton("Jatka", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        String tiedostonimi = selectedFile.getName(); // Muodostetaan tiedostonimi polun avulla
+                        // Avataan skanneri ja välitetään tiedostonimi parametrina
+                        Intent intent = new Intent(erienSelausActivity.this, eranSkannausActivity.class);
+                        intent.putExtra("eranTiedostonimiAvain", tiedostonimi );
+                        startActivity(intent);
+
+
+                    }
+                });
                 // Peruuta sähköpostin lähetys
-                builder2.setNegativeButton("Peruuta", null);
+                builder2.setNeutralButton("Peruuta", null);
                 // Dialogi näkyviin
                 AlertDialog dialog2 = builder2.create();
                 dialog2.show();

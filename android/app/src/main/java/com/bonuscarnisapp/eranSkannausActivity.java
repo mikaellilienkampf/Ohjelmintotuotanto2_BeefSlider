@@ -48,6 +48,7 @@ public class eranSkannausActivity extends AppCompatActivity {
     private Button buttonAktivoiSkanneri;
     private Button buttonEraValmis;
     private Button buttonLahetaSahkopostiin;
+    private boolean jatkettavaEra;
 
     private ArrayAdapter<String> arr;
     private TextView textvievYhteenvetoSkannauksista;
@@ -72,7 +73,7 @@ public class eranSkannausActivity extends AppCompatActivity {
     private static final DecimalFormat dfGramma = new DecimalFormat("0");
     int kokopaino;
     double yhteishinta = 0.00;
-
+    String jatkettavanEranTiedostonimi;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -92,71 +93,11 @@ public class eranSkannausActivity extends AppCompatActivity {
         // ...ActionBarin Paluu-painike näkyviin
         actionBar.setDisplayHomeAsUpEnabled(true);
 
-        // Otetaan syötetty nimi talteen ja päivitetään erän nimi ActionBariin
-        eranNimi = getIntent().getExtras().getString("eranNimiAvain");
-        if (eranNimi.length() != 0) {
-            actionBar.setTitle("Erä: " + eranNimi);
-        } else {
-            actionBar.setTitle("Nimetön erä");
-        }
-
-        // Alustetaan listatut tuotteet
-        listatutTuotteet = new ArrayList<String>();
-        // Luodaan arrayAdapter listviewille
-        listviewListatutTuotteet = findViewById(R.id.lvListatutTuotteet);
-        arr = new ArrayAdapter<String>(
-                this,
-                android.R.layout.simple_list_item_1,
-                listatutTuotteet);
-        listviewListatutTuotteet.setAdapter(arr);
-        listviewListatutTuotteet.setChoiceMode(listviewListatutTuotteet.CHOICE_MODE_SINGLE); // Voi valita monta itemiä
-        listviewListatutTuotteet.setTranscriptMode(listviewListatutTuotteet.TRANSCRIPT_MODE_ALWAYS_SCROLL); // Scrollaa automaattisesti alas, jos tuotteita tulee paljon
-
-        // Valittua tuoteryhmää kerran painamalla pääsee käsiksi erän sisältämään dataan.
-        listviewListatutTuotteet.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                String valitunTuoteryhmanTuotekoodi = (String) listviewListatutTuotteet.getItemAtPosition( position );
-                System.out.println("Valittu tuote: " + valitunTuoteryhmanTuotekoodi);
-                //Kutsutaan metodia, jolla pääsee käsiksi dataan ja poistamaan sitä. Parametrina kuusinumeroinen tuotekoodi
-                katseleTuoteryhmanSkannauksia(valitunTuoteryhmanTuotekoodi.substring(0,6));
-            }
-        });
-
-
+        // Alustetaan kontekstimuuttuja
+        context = getApplicationContext();
 
         // Textview, johon yhteenveto skannatuista tuotteista
         textvievYhteenvetoSkannauksista = findViewById(R.id.tvYhteenvetoSkannauksista);
-
-        // buttonAloitaSkannaus -painikkeen toiminnallisuus
-        buttonAktivoiSkanneri = findViewById(R.id.btAktivoiSkanneri);
-        buttonAktivoiSkanneri.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                aloitaSkannaus();
-            }
-        });
-
-        // buttonKuittinappi -painikkeen toiminnallisuus
-        buttonEraValmis =findViewById(R.id.btValmis);
-        buttonEraValmis.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                kuittaaEraValmiiksi();
-            }
-        });
-
-        // buttonLahetaSahkopostiin -painikkeen toiminnallisuus
-        buttonLahetaSahkopostiin = findViewById(R.id.btLahetaSahkopostiin);
-        buttonLahetaSahkopostiin.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                lahetaSahkopostiin();
-            }
-        });
-
-        // Alustetaan kontekstimuuttuja
-        context = getApplicationContext();
 
         // Alustetaan skannattujen tuotteiden määrä nollaksi
         skannattujenmaara = 0;
@@ -192,9 +133,220 @@ public class eranSkannausActivity extends AppCompatActivity {
             alert.show();
         }
 
-        // Alustetaan HashMap, jolla pidetään kirjaa skannatuista tuotteista
-        skannatutTuotteet = new HashMap<String, ArrayList<String>>(); // Tallennetaan tiedot HashMappiin
+        // buttonEraValmis -painikkeen toiminnallisuus
+        buttonEraValmis =findViewById(R.id.btValmis);
+        buttonEraValmis.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                kuittaaEraValmiiksi();
+            }
+        });
+
+        // buttonLahetaSahkopostiin -painikkeen toiminnallisuus
+        buttonLahetaSahkopostiin = findViewById(R.id.btLahetaSahkopostiin);
+        buttonLahetaSahkopostiin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                lahetaSahkopostiin();
+            }
+        });
+
+        // buttonAloitaSkannaus -painikkeen toiminnallisuus
+        buttonAktivoiSkanneri = findViewById(R.id.btAktivoiSkanneri);
+        buttonAktivoiSkanneri.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                aloitaSkannaus();
+            }
+        });
+
+        // Tarkistetaan, onko kyseessä uusi erä vai jatketaanko vanhan skannausta
+        jatkettavaEra = false;
+        jatkettavanEranTiedostonimi = getIntent().getExtras().getString("eranTiedostonimiAvain");
+        // Jos eranTiedostonimiAvain ei palauta nullia (vaan tiedostonimen) on kyseessä jatkettava erä
+        if(jatkettavanEranTiedostonimi != null){
+            jatkettavaEra = true;
+        }
+
+
+        // Jos kyseessä on uusi erä:
+        if(jatkettavaEra == false) {
+            // Otetaan syötetty nimi talteen ja päivitetään erän nimi ActionBariin
+            eranNimi = getIntent().getExtras().getString("eranNimiAvain");
+            if (eranNimi.length() != 0) {
+                actionBar.setTitle("Uusi erä: " + eranNimi);
+            } else {
+                actionBar.setTitle("Uusi nimetön erä");
+            }
+            // Alustetaan listatut tuotteet (tyhjä arraylist)
+            listatutTuotteet = new ArrayList<String>();
+            // Alustetaan tyhjä HashMap, jolla pidetään kirjaa skannatuista tuotteista
+            skannatutTuotteet = new HashMap<String, ArrayList<String>>(); // Tallennetaan tiedot HashMappiin
+
+        // Jos kyseessä on aiemmin luotu erä, jota jatketaan
+        } else {
+            // Päivitetään erän nimi actionbariin
+            actionBar.setTitle("Jatketaan: " + jatkettavanEranTiedostonimi);
+
+            // Haetaan skannatut tuotteet tiedostosta
+            skannatutTuotteet = haeAiemmatSkannaukset(jatkettavanEranTiedostonimi);
+            //System.out.println("SIK:" + skannatutTuotteet.size());
+            if(skannatutTuotteet.size() > 0) {
+                listatutTuotteet = paivitaListatutTuotteet();
+                if (listatutTuotteet.size() > 0) {
+                    buttonLahetaSahkopostiin.setEnabled(true); // Mahdollistetaan sähköpostin lähetys
+                    buttonEraValmis.setEnabled(true); // Mahdollistetaan erän valmistumisen merkkaaminen
+                }
+            } else {
+                listatutTuotteet = new ArrayList<String>();
+            }
+            //for(int i=0; i<listatutTuotteet.size(); i++){
+            //    System.out.println("PERSE: " + listatutTuotteet.get(i));
+            //}
+            //arr.notifyDataSetChanged();
+            // Iteroidaan hashmapin keyt läpi ja päivitetään listatutTuotteet
+            //for (HashMap.Entry<String, ArrayList<String>> entry : skannatutTuotteet.entrySet()) {
+            //    paivitaTuoteryhmanYhteenveto(entry.getKey());
+            //    // Päivitetään adapteri
+            //    arr.notifyDataSetChanged();
+            //}
+
+
+        }
+        // Luodaan arrayAdapter listviewille
+        listviewListatutTuotteet = findViewById(R.id.lvListatutTuotteet);
+        //listatutTuotteet = new ArrayList<>();
+        arr = new ArrayAdapter<String>(
+                this,
+                android.R.layout.simple_list_item_1,
+                listatutTuotteet);
+        listviewListatutTuotteet.setAdapter(arr);
+        listviewListatutTuotteet.setChoiceMode(listviewListatutTuotteet.CHOICE_MODE_SINGLE); // Voi valita monta itemiä
+        listviewListatutTuotteet.setTranscriptMode(listviewListatutTuotteet.TRANSCRIPT_MODE_ALWAYS_SCROLL); // Scrollaa automaattisesti alas, jos tuotteita tulee paljon
+
+
+        //arr.notifyDataSetChanged(); // Päivitetään siltä varalta, että kyseessä on jatkettava erä
+
+        // Valittua tuoteryhmää kerran painamalla pääsee käsiksi erän sisältämään dataan.
+        listviewListatutTuotteet.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                String valitunTuoteryhmanTuotekoodi = (String) listviewListatutTuotteet.getItemAtPosition( position );
+                System.out.println("Valittu tuote: " + valitunTuoteryhmanTuotekoodi);
+                //Kutsutaan metodia, jolla pääsee käsiksi dataan ja poistamaan sitä. Parametrina kuusinumeroinen tuotekoodi
+                katseleTuoteryhmanSkannauksia(valitunTuoteryhmanTuotekoodi.substring(0,6));
+            }
+        });
+
+
+
+
+
+
+
     }
+
+    /*
+    Metodi, joka täyttää listatutTuotteet arraylistin HashMapin perusteella
+     */
+    public ArrayList<String> paivitaListatutTuotteet(){
+        // Alustetaan tyhjä arraylist, johon kerätään tiedot hashmapista
+        ArrayList<String> palautettavaArray = new ArrayList<String>();
+        // Loopataan HashMap läpi
+        for (HashMap.Entry<String, ArrayList<String>> entry : skannatutTuotteet.entrySet()) {
+            // Haetaan ko. tuotteen tuotenimi
+            String tuotenimi = tuotteidenTiedot.get(entry.getKey())[0];
+            // Haetaan ko. tuotteen arraylist
+            ArrayList<String> tuotteenSkannaukset = skannatutTuotteet.get(entry.getKey());
+            int tuotteidenMaara = tuotteenSkannaukset.size();
+            // Jos tuotteita on olemassa (periaatteessa ne voidaan poistaa kaikki)
+
+            // Alustetaan apumuuttujat
+            int tuotteidenYhteispaino = 0;
+            double tuotteidenYhteisarvo = 0.00;
+            // Loopataan arraylistin sisältö läpi ja kasvatetaan painoa ja arvoa
+            for (int i = 0; i < tuotteenSkannaukset.size(); i++) {
+                String tuotteenTiedot = tuotteenSkannaukset.get(i);
+                String[] tuotteenTiedotTaulukossa = tuotteenTiedot.split(" - ");
+                tuotteidenYhteispaino = tuotteidenYhteispaino + Integer.parseInt(tuotteenTiedotTaulukossa[2].substring(0, tuotteenTiedotTaulukossa[2].length() - 2));
+                tuotteidenYhteisarvo = tuotteidenYhteisarvo + Double.parseDouble(tuotteenTiedotTaulukossa[3].substring(0, tuotteenTiedotTaulukossa[3].length() - 2).replace(",", "."));
+            }
+            String uusiTuotteenYhteenveto = entry.getKey() + " - " + tuotenimi + " (" + tuotteidenMaara + " kpl) - " + tuotteidenYhteispaino + " g - " + dfEuro.format(tuotteidenYhteisarvo) + " €";
+            System.out.println("aiemmin skannatun yht: " + uusiTuotteenYhteenveto);
+            palautettavaArray.add(uusiTuotteenYhteenveto);
+        }
+        System.out.println("KOKO ON: " + palautettavaArray.size());
+        return palautettavaArray;
+    }
+
+    /*
+    Metodi, joka hakee aiemmin skannatun erän skannaukset tiedostosta ja tallentaa ne hashmappiin
+     */
+    public HashMap<String, ArrayList<String>> haeAiemmatSkannaukset(String jatkettavanTiedostonimi){
+        String aiempiSkannaus;
+        String aiemmanSkannauksenSplitBy = ",";
+        String tiedostopolku = getFilesDir().getAbsolutePath() + File.separator + "csv_tiedostot";
+        HashMap<String, ArrayList<String>> aiemmatSkannaukset = new HashMap<String, ArrayList<String>>();
+        try{
+            BufferedReader br2 = new BufferedReader(new FileReader(new File(tiedostopolku, jatkettavanTiedostonimi)));
+            br2.readLine(); // Luetaan otsikkorivi pois
+            // Käydään läpi tiedoston rivit
+            while((aiempiSkannaus = br2.readLine()) != null) {
+
+                String[] aiemminSkannattuTuote = aiempiSkannaus.split(aiemmanSkannauksenSplitBy); // Tallennetaan rivin tiedot
+                String aiemminSkannatunTuotteenTuotekoodi = aiemminSkannattuTuote[0];
+                String aiemminSkannatunTuotteenTuotenimi = aiemminSkannattuTuote[1];
+                int aiemminSkannatunTuotteenPainoGrammoina = Integer.parseInt(aiemminSkannattuTuote[2]);
+                double aiemminSKannatunTuotteenArvoEuroissa = Double.parseDouble(aiemminSkannattuTuote[4]);
+                String aiempiSkannausTekstina = aiemminSkannatunTuotteenTuotekoodi + " - " + aiemminSkannatunTuotteenTuotenimi + " - " + dfGramma.format(aiemminSkannatunTuotteenPainoGrammoina) + " g" + " - " + dfEuro.format(aiemminSKannatunTuotteenArvoEuroissa) + " €";
+                // Koostetaan tietoja
+                skannattujenmaara = skannattujenmaara + 1;
+                yhteishinta = yhteishinta + aiemminSKannatunTuotteenArvoEuroissa;
+                kokopaino = kokopaino + aiemminSkannatunTuotteenPainoGrammoina;
+                // Alustetaan tyhjä array, johon tiedot tallennetaaan
+                ArrayList<String> aiemmatSkannauksetArray = new ArrayList<String>();
+                // Jos tuotekoodi on jo hashMapissa
+                if(aiemmatSkannaukset.containsKey(aiemminSkannatunTuotteenTuotekoodi)){
+                    // Luetaan arraylist HashMapista
+                    aiemmatSkannauksetArray = aiemmatSkannaukset.get(aiemminSkannatunTuotteenTuotekoodi);
+                    // Lisätään juuri luetun rivin tiedot arraylistiin
+                    aiemmatSkannauksetArray.add(aiempiSkannausTekstina);
+                    // Päivitetään HashMap
+                    aiemmatSkannaukset.put(aiemminSkannatunTuotteenTuotekoodi, aiemmatSkannauksetArray);
+                } else {
+                    aiemmatSkannauksetArray.add(aiempiSkannausTekstina);
+                    // Jos tuotekoodia ei vielä ollut HashMapissa, lisätään hashmappiin ko. avain ja arraylist, jossa juuri luettu tieto
+                    aiemmatSkannaukset.put(aiemminSkannatunTuotteenTuotekoodi, aiemmatSkannauksetArray);
+                }
+            }
+            // Päivitetään kokonaisyhteenveto
+            String paivitettyYhteenveto = "Skannattuja tuotteita " + skannattujenmaara + " kpl, yht. " + Double.toString(((double) kokopaino)/1000) + " kg, " + dfEuro.format(Math.abs(yhteishinta)) + " €";
+            textvievYhteenvetoSkannauksista.setText(paivitettyYhteenveto);
+        } catch (IOException e) {
+            // Luodaan uusi hälytysikkuna kertomaan, että tuotteet.csv tiedostoa ei ole vielä alustettu
+            AlertDialog.Builder builder = new AlertDialog.Builder(eranSkannausActivity.this);
+            builder.setTitle("Virhe!");
+            builder.setMessage("Aiempien skannauksien lukeminen tiedostosta ei onnistunut!");
+            builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    // Sulje kysely ja jatka normaalisti
+                    dialog.dismiss();
+                }
+            });
+            AlertDialog alert = builder.create();
+            alert.show();
+        }
+        // Palautetaan tieto
+        return aiemmatSkannaukset;
+    }
+
+
+
+
+
+
+
 
     /*
     Metodi, joka poistaa halatun tuoteryhmän listviewista
@@ -255,7 +407,7 @@ public class eranSkannausActivity extends AppCompatActivity {
                         // Jos määrä meni nollaan
                         if(tuoteryhmanSkannaukset.size() == 0) {
                             System.out.println("Meni nollaan");
-                            alertbuilder.setTitle("Ei enempää skannattuja tuotteita!"); // Muutetaan messagea
+                            alertbuilder.setTitle("Tuoteryhmässä ei enempää skannattuja tuotteita!"); // Muutetaan messagea
                             // Poistetaan tuoteryhmä kokonaan listviewistä
                             poistaTuoteryhmaListviewista(tuotekoodi);
                         }
@@ -301,7 +453,11 @@ public class eranSkannausActivity extends AppCompatActivity {
         AlertDialog.Builder builder = new AlertDialog.Builder(eranSkannausActivity.this);
         builder.setTitle("Varmista CSV:n lähetys");
         builder.setMessage("Lähetetäänkö erän tiedot CSV-muodossa osoitteeseen " + sharedPref.getString("defaultEmail", null) + "?");
-
+        // Jos jatkettava erä
+        if(jatkettavaEra){
+            tiedostonimi = jatkettavanEranTiedostonimi;
+            eranNimi = tiedostonimi.substring(0, tiedostonimi.length() - 4);
+        }
         // Lisätään painikkeet
         builder.setPositiveButton("Lähetä", new DialogInterface.OnClickListener() {
             @Override
@@ -407,17 +563,20 @@ public class eranSkannausActivity extends AppCompatActivity {
                             @Override
                             public void onClick(DialogInterface dialog, int i) {
                                 try {
-                                    // Jos kyseessä oli erän ensimmäinen tuote, määritetään tiedostonimi annetun nimen ja aikaleiman perusteella
-                                    if (skannattujenmaara == 0 && poistettujenMaara == 0) {
-                                        if (eranNimi.length() != 0) {
-                                            tiedostonimi = eranNimi + "_" + aikaleima() + ".csv";
-                                        } else {
-                                            tiedostonimi = "nimeton_" + aikaleima() + ".csv";
+                                    if(jatkettavaEra == false) {
+                                        // Jos kyseessä oli erän ensimmäinen tuote, määritetään tiedostonimi annetun nimen ja aikaleiman perusteella
+                                        if (skannattujenmaara == 0 && poistettujenMaara == 0) {
+                                            if (eranNimi.length() != 0) {
+                                                tiedostonimi = eranNimi + "_" + aikaleima() + ".csv";
+                                            } else {
+                                                tiedostonimi = "nimeton_" + aikaleima() + ".csv";
+                                            }
+                                            //buttonLahetaSahkopostiin.setEnabled(true); // Mahdollistetaan sähköpostin lähetys
+                                            //buttonEraValmis.setEnabled(true); // Mahdollistetaan erän valmistumisen merkkaaminen
                                         }
-                                        buttonLahetaSahkopostiin.setEnabled(true); // Mahdollistetaan sähköpostin lähetys
-                                        buttonEraValmis.setEnabled(true); // Mahdollistetaan erän valmistumisen merkkaaminen
                                     }
-
+                                    buttonLahetaSahkopostiin.setEnabled(true); // Mahdollistetaan sähköpostin lähetys
+                                    buttonEraValmis.setEnabled(true); // Mahdollistetaan erän valmistumisen merkkaaminen
                                     // Tallennetaan juuri skannattu tuote merkkijonona
                                     String juuriSkannattuTuote = nextSixChars + " - " + tuotteenNimi + " - " + dfGramma.format(tuotteenPainoGrammoina) + " g" + " - " + dfEuro.format(tuotteenArvoEuroissa) + " €";
 
@@ -625,6 +784,10 @@ public class eranSkannausActivity extends AppCompatActivity {
         String tallennettavanTiedostonSisalto = "Tuotekoodi,Tuotenimi,PainoGrammoina,KilohintaSkannaushetkella,ArvoEuroissa";
         String tallennettavanTuoteryhmanTiedot;
         String tallennettavanTuotteenTiedotCsvMuodossa;
+        // Jos ollaan jatkamassa aiempaa erää, korvataan tiedostonimi uudella
+        if(jatkettavaEra){
+            tiedostonimi = jatkettavanEranTiedostonimi;
+        }
         // Käydään listviewissä olevat tuoteryhmät läpi for-silmukassa
         for (int i = 0; i < listviewListatutTuotteet.getCount(); i++){
             tallennettavanTuoteryhmanTiedot = listviewListatutTuotteet.getItemAtPosition(i).toString();
@@ -764,21 +927,26 @@ public class eranSkannausActivity extends AppCompatActivity {
     public AlertDialog poistutaankoSkannauksesta(int valinta){
         // Varmistetaan, että käyttäjä todella haluaa keskeyttää skannauksen ja palata alkuvalikkoon
         AlertDialog.Builder builder = new AlertDialog.Builder(eranSkannausActivity.this);
-        // Jos valinta on 0, on funktiota kutsuttu backbuttonilla.
-        if(valinta == 0) {
+        if(jatkettavaEra){
             builder.setTitle("Lopetetaanko skannaus?");
-            if (eranNimi.length() == 0) {
-                builder.setMessage("Oletko varma, että haluat keskeyttää erän skannauksen ja poistua alkuvalikkoon?");
-            } else {
-                builder.setMessage("Oletko varma, että haluat keskeyttää erän '" + eranNimi + "' skannauksen ja poistua alkuvalikkoon?");
-            }
-        // Jos valinta on 1, on funktiota kutsuttu Erä valmis -painikkeesta.
-        } else if (valinta == 1){
-            builder.setTitle("Onko erä valmis?");
-            if (eranNimi.length() == 0) {
-                builder.setMessage("Oletko varma, että koko erä on skannattu ja haluat poistua alkuvalikkoon?");
-            } else {
-                builder.setMessage("Oletko varma, että koko erä '" + eranNimi + "' on skannattu ja haluat poistua alkuvalikkoon?");
+            builder.setMessage("Oletko varma, että haluat keskeyttää erän " + jatkettavanEranTiedostonimi + " skannauksen ja palata alkuvalikkoon?");
+        } else {
+            // Jos valinta on 0, on funktiota kutsuttu backbuttonilla.
+            if (valinta == 0) {
+                builder.setTitle("Lopetetaanko skannaus?");
+                if (eranNimi.length() == 0) {
+                    builder.setMessage("Oletko varma, että haluat keskeyttää erän skannauksen ja poistua alkuvalikkoon?");
+                } else {
+                    builder.setMessage("Oletko varma, että haluat keskeyttää erän '" + eranNimi + "' skannauksen ja poistua alkuvalikkoon?");
+                }
+                // Jos valinta on 1, on funktiota kutsuttu Erä valmis -painikkeesta.
+            } else if (valinta == 1) {
+                builder.setTitle("Onko erä valmis?");
+                if (eranNimi.length() == 0) {
+                    builder.setMessage("Oletko varma, että koko erä on skannattu ja haluat poistua alkuvalikkoon?");
+                } else {
+                    builder.setMessage("Oletko varma, että koko erä '" + eranNimi + "' on skannattu ja haluat poistua alkuvalikkoon?");
+                }
             }
         }
 
