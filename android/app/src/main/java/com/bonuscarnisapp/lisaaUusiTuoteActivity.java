@@ -174,18 +174,25 @@ public class lisaaUusiTuoteActivity extends AppCompatActivity {
                 //haetaan syötetty EAN-koodi
                 String ean = textAnnaEan.getText().toString();
 
-                //etsitään tuoteArrayListasta tuote, jolla on annettu EAN-koodi
-                for (Tuote t : tuoteArrayList) {
-                    if (t.getId() == Integer.parseInt(ean)) {
-                        //jos tuote löytyy, täytetään sen tiedot tekstikenttiin
-                        textAnnaTuoteNimi.setText(t.getNimi());
-                        textAnnaHinta.setText(String.valueOf(t.getHinta()));
-                        return;
-                    }
-                }
 
-                //jos tuotetta ei löydy, annetaan käyttäjälle ilmoitus
-                Toast.makeText(getApplicationContext(), "Tuotetta ei löytynyt", Toast.LENGTH_SHORT).show();
+                //tarkistetaan, onko tuotenimi- ja hintakentät tyhjiä
+                if (textAnnaTuoteNimi.getText().toString().isEmpty() && textAnnaHinta.getText().toString().isEmpty()) {
+                    //etsitään tuoteArrayListasta tuote, jolla on annettu EAN-koodi
+                    for (Tuote t : tuoteArrayList) {
+                        if (t.getId() == Integer.parseInt(ean)) {
+                            //jos tuote löytyy, täytetään sen tiedot tekstikenttiin
+                            textAnnaTuoteNimi.setText(t.getNimi());
+                            textAnnaHinta.setText(String.valueOf(t.getHinta()));
+                            return;
+                        }
+                    }
+
+                    //jos tuotetta ei löydy, annetaan käyttäjälle ilmoitus
+                    Toast.makeText(getApplicationContext(), "Tuotetta ei löytynyt", Toast.LENGTH_SHORT).show();
+                } else {
+                    //jos tuotenimi- ja hintakentät eivät ole tyhjiä, annetaan käyttäjälle ilmoitus
+                    Toast.makeText(getApplicationContext(), "Käytä hakemiseen vain EAN-koodia", Toast.LENGTH_SHORT).show();
+                }
             }
         });
 
@@ -241,35 +248,42 @@ public class lisaaUusiTuoteActivity extends AppCompatActivity {
         bt_paivita.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //Commandotisteri
-                String coomadot = String.valueOf(textAnnaHinta.getText());
-                coomadot = coomadot.replace(",", ".");
-                textAnnaHinta.setText(String.valueOf(coomadot));
 
-                //haetaan syötetty EAN-koodi
-                String ean = textAnnaEan.getText().toString();
+                // Tarkistetaan etteivät textAnnaEan, textAnnaTuoteNimi ja textAnnaHinta -kentät ole tyhjiä
+                if (!textAnnaEan.getText().toString().isEmpty() && !textAnnaTuoteNimi.getText().toString().isEmpty() && !textAnnaHinta.getText().toString().isEmpty()) {
 
-                //etsitään tuoteArrayListasta tuote
-                for (Tuote t : tuoteArrayList) {
-                    if (t.getId() == Integer.parseInt(ean)) {
-                        //päivitetään olion tiedot tekstikenttien mukaisesti
-                        t.setNimi(textAnnaTuoteNimi.getText().toString());
-                        t.setHinta(Float.parseFloat(textAnnaHinta.getText().toString()));
+                    //Commandotisteri
+                    String coomadot = String.valueOf(textAnnaHinta.getText());
+                    coomadot = coomadot.replace(",", ".");
+                    textAnnaHinta.setText(String.valueOf(coomadot));
 
-                        //tallennetaan päivitetty lista tiedostoon
-                        tallennaTiedot();
+                    //haetaan syötetty EAN-koodi
+                    String ean = textAnnaEan.getText().toString();
 
-                        //tyhjennetään EAN, nimi ja hinta -kentät
-                        textAnnaEan.setText("");
-                        textAnnaTuoteNimi.setText("");
-                        textAnnaHinta.setText("");
+                    //etsitään tuoteArrayListasta tuote
+                    for (Tuote t : tuoteArrayList) {
+                        if (t.getId() == Integer.parseInt(ean)) {
+                            //päivitetään olion tiedot tekstikenttien mukaisesti
+                            t.setNimi(textAnnaTuoteNimi.getText().toString());
+                            t.setHinta(Float.parseFloat(textAnnaHinta.getText().toString()));
+
+                            //tallennetaan päivitetty lista tiedostoon
+                            tallennaTiedot();
+
+                            //tyhjennetään EAN, nimi ja hinta -kentät
+                            textAnnaEan.setText("");
+                            textAnnaTuoteNimi.setText("");
+                            textAnnaHinta.setText("");
 
 
-
-                        //annetaan käyttäjälle ilmoitus päivityksen onnistumisesta
-                        Toast.makeText(getApplicationContext(), "Tiedot päivitetty", Toast.LENGTH_SHORT).show();
-                        return;
+                            //annetaan käyttäjälle ilmoitus päivityksen onnistumisesta
+                            Toast.makeText(getApplicationContext(), "Tiedot päivitetty", Toast.LENGTH_SHORT).show();
+                            return;
+                        }
                     }
+                } else {
+                    // Jos jokin kentistä on tyhjä, annetaan käyttäjälle virheilmoitus
+                    Toast.makeText(getApplicationContext(), "Täytä kaikki tiedot päivittämistä varten", Toast.LENGTH_SHORT).show();
                 }
             }
 
