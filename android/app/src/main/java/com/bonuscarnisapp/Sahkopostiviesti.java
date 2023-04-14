@@ -112,11 +112,19 @@ public class Sahkopostiviesti {
                 MimeBodyPart attachmentPart = new MimeBodyPart();
                 File csvLiitteenKansio = new File(this.context.getFilesDir(), "csv_tiedostot");
                 File liitetiedosto = new File(csvLiitteenKansio, this.viestinLiitteet[i]);
-                //File liitetiedosto = new File(this.context.getFilesDir(), this.viestinLiitteet[i]);
                 DataSource source = new FileDataSource(liitetiedosto);
                 attachmentPart.setDataHandler(new DataHandler(source));
                 attachmentPart.setFileName(this.viestinLiitteet[i]);
                 multipart.addBodyPart(attachmentPart); // Lisätään liiteosa muuhun viestiin
+                // Yhteenveto-liite erikseen
+                String yhteenvetoliite = "yhteenveto_" + this.viestinLiitteet[i]; // muodostetaan liitteen nimi
+                MimeBodyPart attachmentPart2 = new MimeBodyPart();
+                File csvYhteenvetoLiitteenKansio = new File(this.context.getFilesDir(), "yhteenvedot");
+                File liitetiedosto2 = new File(csvYhteenvetoLiitteenKansio, yhteenvetoliite);
+                DataSource source2 = new FileDataSource(liitetiedosto2);
+                attachmentPart2.setDataHandler(new DataHandler(source2));
+                attachmentPart2.setFileName(yhteenvetoliite);
+                multipart.addBodyPart(attachmentPart2); // Lisätään liiteosa muuhun viestiin
             }
             mimeMessage.setContent(multipart); // Kasataan varsinainen viesti
 

@@ -16,31 +16,22 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.journeyapps.barcodescanner.ScanContract;
 import com.journeyapps.barcodescanner.ScanOptions;
 
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileReader;
-import java.io.FileWriter;
 import java.io.IOException;
-import java.math.BigDecimal;
-import java.nio.charset.StandardCharsets;
 import java.text.DecimalFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Scanner;
-import java.util.UUID;
 
 public class eranSkannausActivity extends AppCompatActivity {
     private SharedPreferences sharedPref;
@@ -49,7 +40,7 @@ public class eranSkannausActivity extends AppCompatActivity {
     private Button buttonEraValmis;
     private Button buttonLahetaSahkopostiin;
     private boolean jatkettavaEra;
-
+    private String erotinmerkki = ",";
     private ArrayAdapter<String> arr;
     private TextView textvievYhteenvetoSkannauksista;
     private ListView listviewListatutTuotteet;
@@ -397,7 +388,7 @@ public class eranSkannausActivity extends AppCompatActivity {
                         }
 
                         // Tehdään muutokset myös csv-tiedostoon
-                        tallennaMuutoksetCsvTiedostoon(tiedostonimi);
+                        tallennaMuutoksetCsvTiedostoihin(tiedostonimi);
 
                     }
                 });
@@ -441,7 +432,7 @@ public class eranSkannausActivity extends AppCompatActivity {
                 } else {
                     viestinAihe = "Joku hieno nimi: Nimettömän erän tiedot";
                 }
-                String viestinSisalto = "Tämä on sovelluksen lähettämä viesti.\n\nHalutun erän skannaustiedot löytyvät liitteenä olevasta '" + tiedostonimi + "' tiedostosta.";
+                String viestinSisalto = "Tämä on sovelluksen lähettämä viesti.\n\nHalutun erän skannaustiedot löytyvät liitteinä olevista '" + tiedostonimi + "' ja 'yhteenveto_" + tiedostonimi +"' tiedostoista.";
 
                 // Luodaan Sahkopostiviesti-olio (parametreina context, viestin aihe ja sisältö)
                 Sahkopostiviesti sahkopostiviesti = new Sahkopostiviesti(getApplicationContext(), viestinAihe, viestinSisalto, liitetiedostot);
@@ -591,7 +582,7 @@ public class eranSkannausActivity extends AppCompatActivity {
                                     String paivitettyYhteenveto = "Skannattuja tuotteita " + skannattujenmaara + " kpl, yht. " + Double.toString(((double) kokopaino) / 1000) + " kg, " + dfEuro.format(yhteishinta) + " €";
                                     textvievYhteenvetoSkannauksista.setText(paivitettyYhteenveto);
                                     // Tallennetaan muutokset csv-tiedostoon; luo/kirjoittaa yli tiedoston tiedostonimen perusteella aina kun uusi tuote on skannattu ja listattu
-                                    tallennaMuutoksetCsvTiedostoon(tiedostonimi);
+                                    tallennaMuutoksetCsvTiedostoihin(tiedostonimi);
 
                                     // Sulje kysely ja jatka normaalisti
                                     dialog.dismiss();
@@ -727,16 +718,18 @@ public class eranSkannausActivity extends AppCompatActivity {
 
     /*
     Metodi, joka tallentaa muutokset csv-tiedostoon. Käytännössä ylikirjoittaa edellisen samannimisen tiedoston.
-    // HUOM. Tähän joku oliopohjainen pyörittely?
      */
-    public void tallennaMuutoksetCsvTiedostoon(String tiedostonimi){
-        String tallennettavanTiedostonSisalto = "Tuotekoodi,Tuotenimi,PainoGrammoina,KilohintaSkannaushetkella,ArvoEuroissa";
+    public void tallennaMuutoksetCsvTiedostoihin(String tiedostonimi){
+        String tallennettavanTiedostonSisalto = "Tuotekoodi" + erotinmerkki + "Tuotenimi" + erotinmerkki + "PainoGrammoina" + erotinmerkki + "KilohintaSkannaushetkella" + erotinmerkki + "ArvoEuroissa";
+        String tallennettavanYhteenvetotiedostonSisalto = "Tuotekoodi" + erotinmerkki + "Tuotenimi" + erotinmerkki + "Kappalemaara" + erotinmerkki + "KilohintaSkannaushetkella" + erotinmerkki + "YhteispainoGrammoina" + erotinmerkki + "YhteisarvoEuroissa";
         String tallennettavanTuoteryhmanTiedot;
+        String tallennettavanTuoteryhmanTiedotCsvMuodossa;
         String tallennettavanTuotteenTiedotCsvMuodossa;
         // Jos ollaan jatkamassa aiempaa erää, korvataan tiedostonimi uudella
         if(jatkettavaEra){
             tiedostonimi = jatkettavanEranTiedostonimi;
         }
+        String tiedostonimi2 = "yhteenveto_" + tiedostonimi;
         // Käydään listviewissä olevat tuoteryhmät läpi for-silmukassa
         for (int i = 0; i < listviewListatutTuotteet.getCount(); i++){
             tallennettavanTuoteryhmanTiedot = listviewListatutTuotteet.getItemAtPosition(i).toString();
@@ -745,6 +738,27 @@ public class eranSkannausActivity extends AppCompatActivity {
             String[] haetutTuotteenTiedot = haeTuotteenTiedot(tuotteenTuotekoodi); // Haetaan nimi ja kilohinta tiedostosta
             String tuotteenTuotenimi = haetutTuotteenTiedot[0]; // Voisi toki olla myös suoraan: tuotteenTiedotSplitattuna[1]
             Double tuotteenKilohintaSkannaushetkella = Double.parseDouble(haetutTuotteenTiedot[1]); // Otetaan haettu tieto
+            // Päätellään myös tuoteryhmän kappalemäärä
+            String tuotenimiJaLkm = tallennettavanTuoteryhmanTiedotSplitattuna[1].substring(0, tallennettavanTuoteryhmanTiedotSplitattuna[1].length() -5); // Lopusta " kpl)" pois
+            String tuoteryhmanKappalemaara = tuotenimiJaLkm.substring(tuotteenTuotenimi.length()+2, tuotenimiJaLkm.length());
+            // Päätellään myös tuoteryhmän yhteispaino
+            String tuoteryhmanYhteispaino = tallennettavanTuoteryhmanTiedotSplitattuna[2].substring(0, tallennettavanTuoteryhmanTiedotSplitattuna[2].length() -2); // Lopusta " g" pois
+            // Päätellään myös tuoteryhmän yhteisarvo
+            String tuoteryhmanYhteisarvo = tallennettavanTuoteryhmanTiedotSplitattuna[3].substring(0, tallennettavanTuoteryhmanTiedotSplitattuna[3].length() -2); // Lopusta " €" pois
+            // Tallennetaan yhteenvedon tiedot
+            tallennettavanTuoteryhmanTiedotCsvMuodossa =    tuotteenTuotekoodi +
+                                                            erotinmerkki +
+                                                            tuotteenTuotenimi +
+                                                            erotinmerkki +
+                                                            tuoteryhmanKappalemaara +
+                                                            erotinmerkki +
+                                                            tuoteryhmanYhteispaino +
+                                                            erotinmerkki +
+                                                            tuotteenKilohintaSkannaushetkella +
+                                                            erotinmerkki +
+                                                            tuoteryhmanYhteisarvo.replace(",", ".");;
+            tallennettavanYhteenvetotiedostonSisalto = tallennettavanYhteenvetotiedostonSisalto + "\n" + tallennettavanTuoteryhmanTiedotCsvMuodossa;
+
 
             // Nyt kun tuotekoodi on selvillä, haetaan tuotteen skannaukset HashMapista
             ArrayList<String> tuoteryhmanSkannaukset = skannatutTuotteet.get(tuotteenTuotekoodi);
@@ -754,25 +768,38 @@ public class eranSkannausActivity extends AppCompatActivity {
                 String[] tallennettavanTuotteenTiedotSplitattuna = tallennettavanTuotteenTiedot.split(" - ");
                 String tuotteenPainoGrammoina = tallennettavanTuotteenTiedotSplitattuna[2].substring(0, tallennettavanTuotteenTiedotSplitattuna[2].length() -2); // Päätellään merkkijonosta; huom. lopusta suodatatetaan " g" pois!
                 Double tuotteenArvo = (Double.parseDouble(tuotteenPainoGrammoina)/1000)*tuotteenKilohintaSkannaushetkella;
-                tallennettavanTuotteenTiedotCsvMuodossa =   tuotteenTuotekoodi + "," +
-                        tuotteenTuotenimi + "," +
-                        tuotteenPainoGrammoina + "," +
-                        tuotteenKilohintaSkannaushetkella + "," +
-                        (dfEuro.format(tuotteenArvo)).replace(",", ".");
+                tallennettavanTuotteenTiedotCsvMuodossa =   tuotteenTuotekoodi +
+                                                            erotinmerkki +
+                                                            tuotteenTuotenimi +
+                                                            erotinmerkki +
+                                                            tuotteenPainoGrammoina +
+                                                            erotinmerkki +
+                                                            tuotteenKilohintaSkannaushetkella +
+                                                            erotinmerkki +
+                                                            (dfEuro.format(tuotteenArvo)).replace(",", ".");
                 tallennettavanTiedostonSisalto = tallennettavanTiedostonSisalto + "\n" + tallennettavanTuotteenTiedotCsvMuodossa;
             }
 
         }
-        // Tallennetaan tiedosto getFilesDir/csv_tiedostot kansioon
+        // Tallennetaan tiedostojen getFilesDir/csv_tiedostot ja getFilesDir/yhteenvedot kansioon
         try {
             String folder = context.getFilesDir().getAbsolutePath() + File.separator + "csv_tiedostot";
+            String folder2 = context.getFilesDir().getAbsolutePath() + File.separator + "yhteenvedot";
             File subFolder = new File(folder);
+            File subFolder2 = new File(folder2);
             if (!subFolder.exists()) {
                 subFolder.mkdirs();
+            }
+            // Tarkistetaan myös yhteenvedot kansion olemassa olo
+            if (!subFolder2.exists()) {
+                subFolder2.mkdirs();
             }
             FileOutputStream outputStream = new FileOutputStream(new File(subFolder, tiedostonimi));
             outputStream.write(tallennettavanTiedostonSisalto.getBytes());
             outputStream.close();
+            FileOutputStream outputStream2 = new FileOutputStream(new File(subFolder2, tiedostonimi2));
+            outputStream2.write(tallennettavanYhteenvetotiedostonSisalto.getBytes());
+            outputStream2.close();
         } catch (IOException e) {
             // Luodaan uusi hälytysikkuna
             AlertDialog.Builder builder = new AlertDialog.Builder(eranSkannausActivity.this);
@@ -977,7 +1004,7 @@ public class eranSkannausActivity extends AppCompatActivity {
         }
         if(tuotteitaPoistettiin){
             // Tehdään muutokset myös csv-tiedostoon
-            tallennaMuutoksetCsvTiedostoon(tiedostonimi);
+            tallennaMuutoksetCsvTiedostoihin(tiedostonimi);
         }
         // Poistetaan valinnat checkboxeista
         listviewListatutTuotteet.clearChoices();
