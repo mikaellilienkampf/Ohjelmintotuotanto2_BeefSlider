@@ -108,5 +108,11 @@ public class MainActivity extends AppCompatActivity {
         super.onPointerCaptureChanged(hasCapture);
     }
 
+    @Override
+    public void onBackPressed() {
+        // Suorita sulku-toimet
+        finishAffinity(); // Sulkee sovelluksen ja kaikki sen aktiiviset prosessit
+    }
+
 
 }
