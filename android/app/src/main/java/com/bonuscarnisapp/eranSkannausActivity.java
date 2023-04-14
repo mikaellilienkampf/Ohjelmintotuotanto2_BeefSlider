@@ -721,7 +721,7 @@ public class eranSkannausActivity extends AppCompatActivity {
      */
     public void tallennaMuutoksetCsvTiedostoihin(String tiedostonimi){
         String tallennettavanTiedostonSisalto = "Tuotekoodi" + erotinmerkki + "Tuotenimi" + erotinmerkki + "PainoGrammoina" + erotinmerkki + "KilohintaSkannaushetkella" + erotinmerkki + "ArvoEuroissa";
-        String tallennettavanYhteenvetotiedostonSisalto = "Tuotekoodi" + erotinmerkki + "Tuotenimi" + erotinmerkki + "Kappalemaara" + erotinmerkki + "KilohintaSkannaushetkella" + erotinmerkki + "YhteispainoGrammoina" + erotinmerkki + "YhteisarvoEuroissa";
+        String tallennettavanYhteenvetotiedostonSisalto = "Tuotekoodi" + erotinmerkki + "Tuotenimi" + erotinmerkki + "Kappalemaara" + erotinmerkki + "YhteispainoGrammoina" + erotinmerkki + "KilohintaSkannaushetkella" + erotinmerkki + "YhteisarvoEuroissa";
         String tallennettavanTuoteryhmanTiedot;
         String tallennettavanTuoteryhmanTiedotCsvMuodossa;
         String tallennettavanTuotteenTiedotCsvMuodossa;
