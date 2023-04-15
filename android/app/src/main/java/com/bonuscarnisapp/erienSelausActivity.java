@@ -64,7 +64,7 @@ public class erienSelausActivity extends AppCompatActivity {
         actionBar.setDisplayHomeAsUpEnabled(true);
         actionBar.setTitle("Erien selaus");
 
-        // Poistakaa kommentointi alta (rivit 66-89) ja ajakaa kerran, niin saatte poistettua kaikki vanhojen erien tiedostot. Muistakaa kommentoida takaisin!
+        // Poistakaa kommentointi alta (rivit 68-91) ja ajakaa kerran, niin saatte poistettua kaikki vanhojen erien tiedostot. Muistakaa kommentoida takaisin!
         /*
         String csv_folderPath = getFilesDir().getAbsolutePath() + File.separator + "csv_tiedostot";
         File deleteFolder = new File(csv_folderPath);
