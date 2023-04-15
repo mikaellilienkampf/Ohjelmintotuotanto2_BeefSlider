@@ -53,5 +53,5 @@
     <string name="asetukset">Asetukset</string>
 
     <string name="aiempiaEria">Skannattuja eriä tallennettuna: 0 kpl</string> <!-- Erien selaustilan yläosassa näkyvä yhteenveto -->
-
+    <string name="naytaYhteenvetoina">Näytä tiedot yhteenvetoina</string>
 </resources>
