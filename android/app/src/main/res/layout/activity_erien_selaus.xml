@@ -8,11 +8,11 @@
 
     <ListView
         android:id="@+id/listView"
-        android:layout_width="373dp"
-        android:layout_height="548dp"
-        android:layout_marginTop="84dp"
+        android:layout_width="355dp"
+        android:layout_height="447dp"
+        android:layout_marginTop="92dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintHorizontal_bias="0.489"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -20,23 +20,21 @@
         android:id="@+id/tvAiempiaEria"
         android:layout_width="378dp"
         android:layout_height="27dp"
-        android:layout_marginTop="40dp"
+        android:layout_marginTop="56dp"
         android:text="@string/aiempiaEria"
         android:textAlignment="center"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.484"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-/>
+        app:layout_constraintTop_toTopOf="parent" />
 
     <Switch
         android:id="@+id/swNaytaYhteenvetoina"
         android:layout_width="249dp"
         android:layout_height="66dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="16dp"
         android:text="@string/naytaYhteenvetoina"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/listView" />
 </androidx.constraintlayout.widget.ConstraintLayout>
