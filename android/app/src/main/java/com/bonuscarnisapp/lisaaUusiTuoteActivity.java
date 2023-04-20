@@ -12,7 +12,10 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.text.Editable;
+import android.text.InputFilter;
+import android.text.Spanned;
 import android.text.TextUtils;
+import android.text.method.DigitsKeyListener;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -91,6 +94,10 @@ public class lisaaUusiTuoteActivity extends AppCompatActivity {
         bt_poista = findViewById(R.id.bt_poista);
         bt_hae = findViewById(R.id.bt_hae);
         bt_paivita = findViewById(R.id.bt_paivita);
+
+        //pakottaa näppäimistön sallimaan vain numerot, pisteen ja pilkut AnnaHinta kenttässä. (Layoutissa InputType = numberDecimal)
+        textAnnaHinta.setKeyListener(DigitsKeyListener.getInstance("0123456789.,"));
+
 
         // lisää-painikkeen toiminnallisuus
         tallenna.setOnClickListener(new View.OnClickListener() {

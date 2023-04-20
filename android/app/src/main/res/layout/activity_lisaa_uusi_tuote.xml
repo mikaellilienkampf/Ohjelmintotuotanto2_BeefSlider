@@ -7,7 +7,6 @@
     tools:context=".lisaaUusiTuoteActivity">
 
 
-
     <EditText
         android:id="@+id/textAnnaHinta"
         android:layout_width="299dp"
@@ -16,7 +15,7 @@
         android:autofillHints=""
         android:ems="10"
         android:hint="Hinta..."
-        android:inputType="none"
+        android:inputType="numberDecimal"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.491"
         app:layout_constraintStart_toStartOf="parent"
