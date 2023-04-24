@@ -19,6 +19,25 @@
         app:layout_constraintTop_toBottomOf="@+id/tvAsetuksetOtsikko" />
 
     <TextView
+        android:id="@+id/copyright"
+        android:layout_width="159dp"
+        android:layout_height="188dp"
+        android:layout_marginStart="120dp"
+        android:layout_marginTop="368dp"
+        android:text="
+(c) BeefSlider\n \n
+Pasi Makkonen\n
+Niklas Hassinen\n
+Tomi Karjalainen\n
+Teemu Kähkönen\n
+Roope Plattonen\n
+Mikael Lilienkampf\n
+Aatu Kärnä
+"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvAsetuksetOtsikko" />
+
+    <TextView
         android:id="@+id/tvAsetuksetOtsikko"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -50,6 +69,7 @@
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tvTeema" />
+
 
     <TextView
         android:id="@+id/tvAsetettuSahkopostiosoite"
