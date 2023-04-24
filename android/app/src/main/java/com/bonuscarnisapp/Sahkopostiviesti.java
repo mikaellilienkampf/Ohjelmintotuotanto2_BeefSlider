@@ -128,50 +128,6 @@ public class Sahkopostiviesti {
             }
             mimeMessage.setContent(multipart); // Kasataan varsinainen viesti
 
-
-
-
-
-            /*
-            // Kehitysvaiheessa: Luodaan testitiedosto getFilesDir()-hakemistoon
-            String filename = "testiliite.txt";
-            String fileContents = "Tämä on testitiedosto sähköpostiviestin liitteeksi!";
-            try (FileOutputStream fos = context.openFileOutput(filename, Context.MODE_PRIVATE)) {
-                fos.write(fileContents.getBytes(StandardCharsets.UTF_8));
-            } catch (FileNotFoundException e) {
-                throw new RuntimeException(e);
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }*/
-
-            /*
-            // Tällä voidaan listata Logcatiin getFilesDir()-kansiossa olevat tiedostot; helpottanee testausta
-            File directory = new File(this.context.getFilesDir().toString());
-            File[] files = directory.listFiles();
-            Log.d("Files", "Size: "+ files.length);
-            for (int i = 0; i < files.length; i++)
-            {
-                Log.d("Files", "FileName: " + files[i].getName());
-
-                // Tällä poistettiin väärään paikkaan joutuneet csv-tiedostot
-                //if(files[i].getName().endsWith(".csv")){
-                //    files[i].delete();
-                //}
-            }*/
-
-            /*
-            // Tällä voidaan listata Logcatiin getFilesDir()/csv_tiedostot-kansiossa olevat tiedostot; helpottanee testausta
-            File csvdirectory = new File(this.context.getFilesDir(), "csv_tiedostot");//.toString();
-            File[] csvfiles = csvdirectory.listFiles();
-            Log.d("csvFiles", "Size: "+ csvfiles.length);
-            for (int j = 0; j < csvfiles.length; j++)
-            {
-                Log.d("csvFiles", "FileName: " + csvfiles[j].getName());
-            }*/
-
-
-
-
             // Jotain määrityksiä...
             MailcapCommandMap mc = (MailcapCommandMap) CommandMap.getDefaultCommandMap();
             mc.addMailcap("text/html;; x-java-content-handler=com.sun.mail.handlers.text_html");
@@ -236,6 +192,5 @@ public class Sahkopostiviesti {
                 alert.show();
             }
         }
-
     }
 }

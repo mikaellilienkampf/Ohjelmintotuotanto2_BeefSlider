@@ -34,7 +34,7 @@ public class erienSelausActivity extends AppCompatActivity {
     private SharedPreferences sharedPref;
     private boolean isDarkTheme;
 
-    private String erotinmerkki = ","; // CSV:n erotinmerkki!
+    private String erotinmerkki = ";"; // CSV:n erotinmerkki!
     private ListView listView;
 
     private TextView textviewAiempiaEria;
@@ -108,8 +108,6 @@ public class erienSelausActivity extends AppCompatActivity {
             csvFilenames[i] = tiedostonimi.substring(0, tiedostonimi.length()-4); // Lopusta .csv pois
         }
         //Muunnetaan csv tiedoston tiedot listaksi
-        //List<File> fileList = new ArrayList<>(Arrays.asList(csvFiles)); // normi csv:t
-        //List<File> fileList2 = new ArrayList<>(Arrays.asList(csvFiles2)); // Yhteenveto csv:t
         List<String> filenameList = new ArrayList<>(Arrays.asList(csvFilenames));
 
         // Päivitetään textviewAiempiaEria
@@ -297,21 +295,6 @@ public class erienSelausActivity extends AppCompatActivity {
             });
 
             builder.setNegativeButton("Palaa", null);
-            /*
-            // Muutosten tallennus
-            builder.setPositiveButton("Tallenna", (dialog, which) -> {
-                try {
-                    FileWriter writer = new FileWriter(selectedFile, false);
-                    for (String rowData : lines) {
-                        writer.write(rowData + "\n");
-                    }
-                    writer.close();
-                } catch (IOException e) {
-                    Toast.makeText(erienSelausActivity.this, "Virhe tiedoston tallennuksessa", Toast.LENGTH_SHORT).show();
-                }
-            });*/
-
-            //builder.setNegativeButton("Peruuta", null);
 
             // Mahdollistetaan muut toiminnot
             builder.setNeutralButton("Muut toiminnot", (dialog, which) -> {
@@ -328,7 +311,7 @@ public class erienSelausActivity extends AppCompatActivity {
                         // Lähetetään sähköpostiin halutut tiedostot
                         String[] liitetiedostot = {tiedostonimi};
                         // Muodostetaan viestin aihe
-                        String viestinAihe = "Joku hieno nimi: Erän " + tiedostonimi + " tiedot";
+                        String viestinAihe = "BeefSlider: Erän " + tiedostonimi + " tiedot";
                         String viestinSisalto = "Tämä on sovelluksen lähettämä viesti.\n\nHalutun erän skannaustiedot löytyvät liitteinä olevista '" + tiedostonimi + "' ja 'yhteenveto_" + tiedostonimi +"' tiedostoista.";
 
                         // Luodaan Sahkopostiviesti-olio (parametreina context, viestin aihe ja sisältö)
@@ -346,8 +329,6 @@ public class erienSelausActivity extends AppCompatActivity {
                         Intent intent = new Intent(erienSelausActivity.this, eranSkannausActivity.class);
                         intent.putExtra("eranTiedostonimiAvain", tiedostonimi );
                         startActivity(intent);
-
-
                     }
                 });
                 // Peruuta sähköpostin lähetys
@@ -356,8 +337,6 @@ public class erienSelausActivity extends AppCompatActivity {
                 AlertDialog dialog2 = builder2.create();
                 dialog2.show();
             });
-
-
 
             // Ikkuna näkyviin
             builder.show();

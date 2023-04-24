@@ -1,6 +1,6 @@
 <resources>
     <!-- Ohjelman nimi; oletuksena näkyisi ActionBarissa otsikkona, mutta monessa Actionissa ko. otsikko on korvattu muulla -->
-    <string name="app_name">joku hieno nimi</string>
+    <string name="app_name">BeefSlider</string>
 
     <!-- activity_main.xml / MainActivityn sisältö -->
     <string name="start_new">Aloita uuden erän skannaus</string>                <!-- "btAloitaUudenEranSkannaus" -buttonin teksti -->

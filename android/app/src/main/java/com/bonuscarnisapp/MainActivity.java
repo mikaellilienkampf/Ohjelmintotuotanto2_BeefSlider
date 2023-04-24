@@ -48,7 +48,7 @@ public class MainActivity extends AppCompatActivity {
 
         // ActionBarin otsikon päivitys
         ActionBar actionBar = getSupportActionBar();
-        actionBar.setTitle("Alkuvalikko");
+        actionBar.setTitle("BeefSlider - Alkuvalikko");
 
         // aloitaUudenEranSkannaus -painikkeen toiminnallisuus
         buttonAloitaUudenEranSkannaus = findViewById(R.id.btAloitaUudenEranSkannaus);
