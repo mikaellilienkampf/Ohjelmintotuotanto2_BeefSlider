@@ -80,10 +80,6 @@ public class Tuote {
         return id;
     }
 
-    public void setId(int id) {
-        this.id = id;
-    }
-
     public String getNimi() {
         return nimi;
     }
